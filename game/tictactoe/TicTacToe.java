@@ -2,14 +2,12 @@ package game.tictactoe;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 
 public class TicTacToe {
 
     public static void main(String[] args) {
         TicTacToe game = new TicTacToe();
-        Random rnd = new Random();
         int depth = 5;
         int curPlayer = 1;
 
@@ -65,16 +63,9 @@ public class TicTacToe {
             if (x >= '1' && x <= '3' && y >= 'a' && y <= 'c') {
                 if (board[x - '1'][y - 'a'] != 0)
                     continue;
+                scan.close();
                 return new Move(x - '1', y - 'a', 1);
             }
-        }
-    }
-
-    private void traverse(Node root) {
-        System.out.printf("%s %d\n",
-        root.getMove(), root.getVal());
-        for (Node n : root.getChildren()) {
-            traverse(n);
         }
     }
 

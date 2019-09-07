@@ -23,12 +23,10 @@ public class Move {
         return player;
     }
 
-    // XXX
     public String toString() {
         String str = "";
         str += (char)('a' + y);
         str += (x + 1);
-//        str += " (" + player + ")";
         return str;
     }
 }
