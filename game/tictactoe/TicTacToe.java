@@ -69,7 +69,7 @@ public class TicTacToe {
 
     private int[][] board;
     private int size;
-	private Scanner scanner;
+    private Scanner scanner;
 
     public TicTacToe() {
         size = 3;
