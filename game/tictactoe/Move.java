@@ -1,9 +1,15 @@
 package game.tictactoe;
 
+/**
+ * A player's move in the chess.
+ * In Tic-Tac-Toe, it contains of the position (x, y)
+ * and the player who made this move.
+ */
 public class Move {
-    private int x;
+
+	private int x;
     private int y;
-    private int player; // 1 or 2
+    private int player;
 
     public Move(int x, int y, int player) {
         this.x = x;
@@ -24,9 +30,6 @@ public class Move {
     }
 
     public String toString() {
-        String str = "";
-        str += (char)('a' + y);
-        str += (x + 1);
-        return str;
+        return String.format("%c%d", (char)('a' + y), (x + 1));
     }
 }
