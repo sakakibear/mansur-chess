@@ -51,10 +51,9 @@ public class TicTacToe {
     }
 
     private Move getPlayerMove() {
-        Scanner scan = new Scanner(System.in);
         while (true) {
             System.out.print("[O] > ");
-            String str = scan.nextLine();
+            String str = scanner.nextLine();
             str = str.trim();
             if (str.length() != 2)
                 continue;
@@ -63,7 +62,6 @@ public class TicTacToe {
             if (x >= '1' && x <= '3' && y >= 'a' && y <= 'c') {
                 if (board[x - '1'][y - 'a'] != 0)
                     continue;
-                scan.close();
                 return new Move(x - '1', y - 'a', 1);
             }
         }
@@ -71,10 +69,12 @@ public class TicTacToe {
 
     private int[][] board;
     private int size;
+	private Scanner scanner;
 
     public TicTacToe() {
         size = 3;
         board = new int[size][size];
+        scanner = new Scanner(System.in);
     }
 
     private int evaluate() {
