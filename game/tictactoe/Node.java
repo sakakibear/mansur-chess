@@ -3,10 +3,17 @@ package game.tictactoe;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Node of a search tree.
+ * Contains evaluation value, the move taken and possible next moves.
+ */
 public class Node {
 
+	// Evaluation value
 	private int val;
+	// Current move, which is taken (can be null)
 	private Move move;
+	// Possible next moves
 	private List<Node> children;
 
 	public Node() {
