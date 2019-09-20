@@ -1,13 +1,12 @@
 package game.tictactoe;
 
 /**
- * A player's move in the chess.
- * In Tic-Tac-Toe, it contains of the position (x, y)
- * and the player who made this move.
+ * A player's move in the chess. In Tic-Tac-Toe, it contains of the position (x,
+ * y) and the player who made this move.
  */
 public class Move {
 
-	private int x;
+    private int x;
     private int y;
     private int player;
 
@@ -29,7 +28,8 @@ public class Move {
         return player;
     }
 
+    @Override
     public String toString() {
-        return String.format("%c%d", (char)('a' + y), (x + 1));
+        return String.format("%c%d", (char) ('a' + y), (x + 1));
     }
 }
