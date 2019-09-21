@@ -23,12 +23,20 @@ public class TicTacToe {
         int depth = 5;
         int curPlayer = 1;
 
+        // Command line option
         try {
-            depth = Integer.parseInt(args[0]);
-            if (args.length > 1)
-                curPlayer = 2;
+            for (int i = 0; i < args.length; i++) {
+                if (args[i].equals("-depth")) {
+                    // Depth of game tree searching
+                    depth = Integer.parseInt(args[++i]);
+                } else if (args[i].equals("-md")) {
+                    // Move defensive
+                    curPlayer = 2;
+                }
+            }
         } catch (Exception e) {
-
+            System.err.println("Invalid option. See README.md.");
+            return;
         }
 
         while (true) {
