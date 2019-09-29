@@ -1,5 +1,17 @@
 package game.tictactoe;
 
+import static game.tictactoe.Constants.BOARD_SIZE;
+import static game.tictactoe.Constants.DEFAULT_SEARCH_DEPTH;
+import static game.tictactoe.Constants.PIECES;
+import static game.tictactoe.Constants.PLAYER_AI;
+import static game.tictactoe.Constants.PLAYER_HUMAN;
+import static game.tictactoe.Constants.VALUE_LOSE;
+import static game.tictactoe.Constants.VALUE_LOWER_BOUND;
+import static game.tictactoe.Constants.VALUE_ONE_IN_LINE;
+import static game.tictactoe.Constants.VALUE_TWO_IN_LINE;
+import static game.tictactoe.Constants.VALUE_UPPER_BOUND;
+import static game.tictactoe.Constants.VALUE_WIN;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -8,20 +20,18 @@ public class TicTacToe {
 
     // Chess board
     private int[][] board;
-    private int size;
     // Scanner to get user input
     private Scanner scanner;
 
     public TicTacToe() {
-        size = 3;
-        board = new int[size][size];
+        board = new int[BOARD_SIZE][BOARD_SIZE];
         scanner = new Scanner(System.in);
     }
 
     public static void main(String[] args) {
         TicTacToe game = new TicTacToe();
-        int depth = 5;
-        int curPlayer = 1;
+        int depth = DEFAULT_SEARCH_DEPTH;
+        int curPlayer = PLAYER_HUMAN;
 
         // Command line option
         try {
@@ -31,7 +41,7 @@ public class TicTacToe {
                     depth = Integer.parseInt(args[++i]);
                 } else if (args[i].equals("-md")) {
                     // Move defensive
-                    curPlayer = 2;
+                    curPlayer = PLAYER_AI;
                 }
             }
         } catch (Exception e) {
@@ -43,18 +53,18 @@ public class TicTacToe {
             game.printBoard();
             if (game.isGameOver(curPlayer))
                 break;
-            if (curPlayer == 1) {
+            if (curPlayer == PLAYER_HUMAN) {
                 // Human player
                 game.move(game.getPlayerMove());
             } else {
                 // PC
                 Node root = game.makeTree(curPlayer, null, depth);
-                SearchResult ab = game.alphabeta(root, depth, -1001, 1001);
+                SearchResult ab = game.alphabeta(root, depth, VALUE_LOWER_BOUND, VALUE_UPPER_BOUND);
                 Move move = root.getChildren().get(ab.idx).getMove();
-                System.out.printf("[X] > %s\n", move);
+                System.out.printf("[%c] > %s\n", PIECES[PLAYER_AI], move);
                 game.move(move);
             }
-            curPlayer = curPlayer == 1 ? 2 : 1;
+            curPlayer = curPlayer == PLAYER_HUMAN ? PLAYER_AI : PLAYER_HUMAN;
         }
 
         int v = game.evaluate();
@@ -69,10 +79,10 @@ public class TicTacToe {
 
     private void printBoard() {
         System.out.println("\n  a b c");
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
             System.out.printf("%d ", i + 1);
-            for (int j = 0; j < size; j++) {
-                System.out.printf("%s ", board[i][j] == 0 ? " " : board[i][j] == 1 ? "O" : "X");
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                System.out.printf("%c ", PIECES[board[i][j]]);
             }
             System.out.printf("%d", i + 1);
             System.out.println();
@@ -82,7 +92,7 @@ public class TicTacToe {
 
     private Move getPlayerMove() {
         while (true) {
-            System.out.print("[O] > ");
+            System.out.printf("[%c] > ", PIECES[PLAYER_HUMAN]);
             String str = scanner.nextLine();
             str = str.trim();
             if (str.length() != 2)
@@ -103,7 +113,7 @@ public class TicTacToe {
         if (moves.size() == 0)
             return true;
         int value = evaluate();
-        if (value == 1000 || value == -1000)
+        if (value == VALUE_WIN || value == VALUE_LOSE)
             return true;
         return false;
     }
@@ -117,41 +127,41 @@ public class TicTacToe {
     private int evaluate() {
         int value = 0;
         // check the rows
-        for (int i = 0; i < size; i++) {
-            int[] line = new int[size];
-            for (int j = 0; j < size; j++) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            int[] line = new int[BOARD_SIZE];
+            for (int j = 0; j < BOARD_SIZE; j++) {
                 line[j] = board[i][j];
             }
             int v = getValueOfLine(line);
-            if (v == 1000 || v == -1000)
+            if (v == VALUE_WIN || v == VALUE_LOSE)
                 return v;
             value += v;
         }
         // check the columns
-        for (int j = 0; j < size; j++) {
-            int[] line = new int[size];
-            for (int i = 0; i < size; i++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            int[] line = new int[BOARD_SIZE];
+            for (int i = 0; i < BOARD_SIZE; i++) {
                 line[i] = board[i][j];
             }
             int v = getValueOfLine(line);
-            if (v == 1000 || v == -1000)
+            if (v == VALUE_WIN || v == VALUE_LOSE)
                 return v;
             value += v;
         }
         // check the diagonal lines
-        int[] line = new int[size];
-        for (int i = 0; i < size; i++) {
+        int[] line = new int[BOARD_SIZE];
+        for (int i = 0; i < BOARD_SIZE; i++) {
             line[i] = board[i][i];
         }
         int v = getValueOfLine(line);
-        if (v == 1000 || v == -1000)
+        if (v == VALUE_WIN || v == VALUE_LOSE)
             return v;
         value += v;
-        for (int i = 0; i < size; i++) {
-            line[i] = board[i][size - i - 1];
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            line[i] = board[i][BOARD_SIZE - i - 1];
         }
         v = getValueOfLine(line);
-        if (v == 1000 || v == -1000)
+        if (v == VALUE_WIN || v == VALUE_LOSE)
             return v;
         value += v;
         return value;
@@ -167,27 +177,27 @@ public class TicTacToe {
     private int getValueOfLine(int[] line) {
         int p1 = 0, p2 = 0;
         for (int n : line) {
-            if (n == 1)
+            if (n == PLAYER_HUMAN)
                 p1++;
-            if (n == 2)
+            if (n == PLAYER_AI)
                 p2++;
         }
         if (p1 > 0 && p2 > 0)
             return 0;
         // Three in a line means winning
         if (p1 == 3)
-            return 1000;
+            return VALUE_WIN;
         if (p1 == 2)
-            return 10;
+            return VALUE_TWO_IN_LINE;
         if (p1 == 1)
-            return 1;
+            return VALUE_ONE_IN_LINE;
         // Three in a line of the other player means losing
         if (p2 == 3)
-            return -1000;
+            return VALUE_LOSE;
         if (p2 == 2)
-            return -10;
+            return -VALUE_TWO_IN_LINE;
         if (p2 == 1)
-            return -1;
+            return -VALUE_ONE_IN_LINE;
         return 0;
     }
 
@@ -200,10 +210,10 @@ public class TicTacToe {
     private List<Move> getValidMoves(int player) {
         List<Move> result = new ArrayList<Move>();
         int value = evaluate();
-        if (value == 1000 || value == -1000)
+        if (value == VALUE_WIN || value == VALUE_LOSE)
             return result;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
                 if (board[i][j] == 0)
                     result.add(new Move(i, j, player));
             }
@@ -231,14 +241,14 @@ public class TicTacToe {
         Node root = new Node();
         List<Move> moves = getValidMoves(curPlayer);
         if (depth == 0 || moves.size() == 0) {
-            int v = evaluate() * (curPlayer == 1 ? 1 : -1);
+            int v = evaluate() * (curPlayer == PLAYER_HUMAN ? 1 : -1);
             root.setVal(v);
         }
         root.setMove(move);
         if (depth > 0) {
             for (Move m : moves) {
                 move(m);
-                root.addChild(makeTree(curPlayer == 1 ? 2 : 1, m, depth - 1));
+                root.addChild(makeTree(curPlayer == PLAYER_HUMAN ? PLAYER_AI : PLAYER_HUMAN, m, depth - 1));
                 unmove(m);
             }
         }
