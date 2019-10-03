@@ -98,9 +98,15 @@ public class TicTacToe {
             str = str.trim();
             if (str.length() != 2)
                 continue;
+            // User input should look like 'a1', 'b3', 'c2'
+            // or '1a', '2b', '3c', ...
             char x = str.charAt(1);
             char y = str.charAt(0);
-            // User input should look like 'a1', 'b3', 'c2' ...
+            if (x >= 'a' && x <= 'z') {
+                char tmp = x;
+                x = y;
+                y = tmp;
+            }
             if (x >= '1' && x <= '3' && y >= 'a' && y <= 'c') {
                 if (board[x - '1'][y - 'a'] != 0)
                     continue;
