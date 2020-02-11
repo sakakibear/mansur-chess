@@ -1,8 +1,8 @@
 package game.tictactoe;
 
 import static game.tictactoe.Constants.BOARD_SIZE;
-import static game.tictactoe.Constants.PLAYER_AI;
-import static game.tictactoe.Constants.PLAYER_HUMAN;
+import static game.tictactoe.Constants.PLAYER_1;
+import static game.tictactoe.Constants.PLAYER_2;
 import static game.tictactoe.Constants.VALUE_LOSE;
 import static game.tictactoe.Constants.VALUE_ONE_IN_LINE;
 import static game.tictactoe.Constants.VALUE_TWO_IN_LINE;
@@ -14,8 +14,9 @@ import static game.tictactoe.Constants.VALUE_WIN;
 public class Evaluator {
 
     /**
-     * Evaluate current state of game and return the value. Note: this function
-     * has the most influence on AI performance.
+     * TODO Evaluation based on player1 Evaluate current state of game and
+     * return the value. Note: this function has the most influence on AI
+     * performance.
      * 
      * @param board
      * @return value
@@ -73,9 +74,9 @@ public class Evaluator {
     private int getValueOfLine(int[] line) {
         int p1 = 0, p2 = 0;
         for (int n : line) {
-            if (n == PLAYER_HUMAN)
+            if (n == PLAYER_1)
                 p1++;
-            if (n == PLAYER_AI)
+            if (n == PLAYER_2)
                 p2++;
         }
         if (p1 > 0 && p2 > 0)

@@ -8,8 +8,8 @@ public final class Constants {
     // Game
     public static final int BOARD_SIZE = 3;
     public static final int DEFAULT_SEARCH_DEPTH = 5;
-    public static final int PLAYER_HUMAN = 1;
-    public static final int PLAYER_AI = 2;
+    public static final int PLAYER_1 = 1;
+    public static final int PLAYER_2 = 2;
     public static final char[] PIECES = { ' ', 'O', 'X' };
 
     // Evaluation

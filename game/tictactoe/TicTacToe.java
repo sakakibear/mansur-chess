@@ -3,8 +3,8 @@ package game.tictactoe;
 import static game.tictactoe.Constants.BOARD_SIZE;
 import static game.tictactoe.Constants.DEFAULT_SEARCH_DEPTH;
 import static game.tictactoe.Constants.PIECES;
-import static game.tictactoe.Constants.PLAYER_AI;
-import static game.tictactoe.Constants.PLAYER_HUMAN;
+import static game.tictactoe.Constants.PLAYER_1;
+import static game.tictactoe.Constants.PLAYER_2;
 import static game.tictactoe.Constants.VALUE_LOSE;
 import static game.tictactoe.Constants.VALUE_LOWER_BOUND;
 import static game.tictactoe.Constants.VALUE_UPPER_BOUND;
@@ -32,7 +32,10 @@ public class TicTacToe {
     public static void main(String[] args) {
         TicTacToe game = new TicTacToe();
         int depth = DEFAULT_SEARCH_DEPTH;
-        int curPlayer = PLAYER_HUMAN;
+        int curPlayer = PLAYER_1;
+        boolean[] isHuman = new boolean[PLAYER_2 + 1];
+        isHuman[PLAYER_1] = true;
+        isHuman[PLAYER_2] = false;
 
         // Command line option
         try {
@@ -41,8 +44,9 @@ public class TicTacToe {
                     // Depth of game tree searching
                     depth = Integer.parseInt(args[++i]);
                 } else if (args[i].equals("-md")) {
-                    // Move defensive
-                    curPlayer = PLAYER_AI;
+                    // Human player moves defensive
+                    isHuman[PLAYER_1] = false;
+                    isHuman[PLAYER_2] = true;
                 }
             }
         } catch (Exception e) {
@@ -54,27 +58,28 @@ public class TicTacToe {
             game.printBoard();
             if (game.isGameOver(curPlayer))
                 break;
-            if (curPlayer == PLAYER_HUMAN) {
+            if (isHuman[curPlayer]) {
                 // Human player
-                game.move(game.getPlayerMove());
+                game.move(game.getPlayerMove(curPlayer));
             } else {
                 // PC
                 Node root = game.makeTree(curPlayer, null, depth);
                 SearchResult ab = game.alphabeta(root, depth, VALUE_LOWER_BOUND, VALUE_UPPER_BOUND);
                 Move move = root.getChildren().get(ab.idx).getMove();
-                System.out.printf("[%c] > %s\n", PIECES[PLAYER_AI], move);
+                System.out.printf("[%c] > %s\n", PIECES[curPlayer], move);
                 game.move(move);
             }
-            curPlayer = curPlayer == PLAYER_HUMAN ? PLAYER_AI : PLAYER_HUMAN;
+            // Switch current player
+            curPlayer = curPlayer == PLAYER_1 ? PLAYER_2 : PLAYER_1;
         }
 
         int v = game.evaluate();
         if (v > 0) {
-            System.out.println("Player win");
+            System.out.printf("[%c] won.\n", PIECES[PLAYER_1]);
         } else if (v < 0) {
-            System.out.println("PC win");
+            System.out.printf("[%c] won.\n", PIECES[PLAYER_2]);
         } else {
-            System.out.println("Draw");
+            System.out.printf("Draw.\n");
         }
     }
 
@@ -91,9 +96,9 @@ public class TicTacToe {
         System.out.println("  a b c\n");
     }
 
-    private Move getPlayerMove() {
+    private Move getPlayerMove(int curPlayer) {
         while (true) {
-            System.out.printf("[%c] > ", PIECES[PLAYER_HUMAN]);
+            System.out.printf("[%c] > ", PIECES[curPlayer]);
             String str = scanner.nextLine();
             str = str.trim();
             if (str.length() != 2)
@@ -110,7 +115,7 @@ public class TicTacToe {
             if (x >= '1' && x <= '3' && y >= 'a' && y <= 'c') {
                 if (board[x - '1'][y - 'a'] != 0)
                     continue;
-                return new Move(x - '1', y - 'a', 1);
+                return new Move(x - '1', y - 'a', curPlayer);
             }
         }
     }
@@ -169,14 +174,16 @@ public class TicTacToe {
         Node root = new Node();
         List<Move> moves = getValidMoves(curPlayer);
         if (depth == 0 || moves.size() == 0) {
-            int v = evaluate() * (curPlayer == PLAYER_HUMAN ? 1 : -1);
+            // Evaluation is based on player 1
+            int v = evaluate() * (curPlayer == PLAYER_1 ? 1 : -1);
             root.setVal(v);
         }
         root.setMove(move);
         if (depth > 0) {
             for (Move m : moves) {
                 move(m);
-                root.addChild(makeTree(curPlayer == PLAYER_HUMAN ? PLAYER_AI : PLAYER_HUMAN, m, depth - 1));
+                // Switch player
+                root.addChild(makeTree(curPlayer == PLAYER_1 ? PLAYER_2 : PLAYER_1, m, depth - 1));
                 unmove(m);
             }
         }
