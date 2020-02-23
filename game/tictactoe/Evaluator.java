@@ -14,9 +14,8 @@ import static game.tictactoe.Constants.VALUE_WIN;
 public class Evaluator {
 
     /**
-     * TODO Evaluation based on player1 Evaluate current state of game and
-     * return the value. Note: this function has the most influence on AI
-     * performance.
+     * Evaluate current state of game based on player1 and return the value.
+     * Note: this function has the most influence on AI performance.
      * 
      * @param board
      * @return value
