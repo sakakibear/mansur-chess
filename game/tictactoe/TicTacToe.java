@@ -180,14 +180,29 @@ public class TicTacToe {
         }
         root.setMove(move);
         if (depth > 0) {
+            int[][] backup = copyBoard();
             for (Move m : moves) {
                 move(m);
                 // Switch player
                 root.addChild(makeTree(curPlayer == PLAYER_1 ? PLAYER_2 : PLAYER_1, m, depth - 1));
-                unmove(m);
+                restoreBoard(backup);
             }
         }
         return root;
+    }
+
+    private int[][] copyBoard() {
+        int[][] copied = new int[BOARD_SIZE][BOARD_SIZE];
+        for (int i = 0; i < BOARD_SIZE; i++)
+            for (int j = 0; j < BOARD_SIZE; j++)
+                copied[i][j] = board[i][j];
+        return copied;
+    }
+
+    private void restoreBoard(int[][] board) {
+        for (int i = 0; i < BOARD_SIZE; i++)
+            for (int j = 0; j < BOARD_SIZE; j++)
+                this.board[i][j] = board[i][j];
     }
 
     /**
