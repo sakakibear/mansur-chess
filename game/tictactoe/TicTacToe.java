@@ -158,10 +158,6 @@ public class TicTacToe {
         board[move.getX()][move.getY()] = move.getPlayer();
     }
 
-    private void unmove(Move move) {
-        board[move.getX()][move.getY()] = 0;
-    }
-
     /**
      * Build the search tree. Root is current state of game.
      * 
