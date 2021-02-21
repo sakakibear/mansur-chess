@@ -176,8 +176,8 @@ public class TicTacToe {
         }
         root.setMove(move);
         if (depth > 0) {
-            int[][] backup = copyBoard();
             for (Move m : moves) {
+                int[][] backup = copyBoard();
                 move(m);
                 // Switch player
                 root.addChild(makeTree(curPlayer == PLAYER_1 ? PLAYER_2 : PLAYER_1, m, depth - 1));
