@@ -61,7 +61,7 @@ public abstract class BaseGame {
             if (isHumanPlayer(curPlayer)) {
                 move(getPlayerMove(curPlayer));
             } else {
-                Node<BaseMove> root = makeTree(curPlayer, null, depth);
+                Node<? extends BaseMove> root = makeTree(curPlayer, null, depth);
                 SearchResult ab = alphabeta(root, depth, VALUE_LOWER_BOUND, VALUE_UPPER_BOUND);
                 BaseMove move = root.getChildren().get(ab.idx).getMove();
                 System.out.println(move);

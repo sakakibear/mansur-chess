@@ -32,7 +32,7 @@ public class Node<T extends BaseMove> {
         this.val = val;
     }
 
-    public BaseMove getMove() {
+    public T getMove() {
         return move;
     }
 
