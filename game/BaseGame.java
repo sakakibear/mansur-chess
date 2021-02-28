@@ -90,7 +90,7 @@ public abstract class BaseGame {
             for (BaseMove m : moves) {
                 BaseBoard backupBoard = board.clone();
                 move(m);
-                // Could be solved using generic (Board, Move)
+                // TODO Could be solved using generic (Board, Move)
                 @SuppressWarnings("unchecked")
                 T tMove = (T) m;
                 // Switch player

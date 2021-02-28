@@ -11,5 +11,6 @@ public abstract class BaseEvaluator {
      * @param board
      * @return value
      */
+    // TODO Could be more adaptable if defined as long
     public abstract int evaluate(BaseBoard board);
 }
