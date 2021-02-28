@@ -63,7 +63,7 @@ public abstract class BaseGame {
             } else {
                 Node<? extends BaseMove> root = makeTree(curPlayer, null, depth);
                 SearchResult ab = alphabeta(root, depth, VALUE_LOWER_BOUND, VALUE_UPPER_BOUND);
-                BaseMove move = root.getChildren().get(ab.idx).getMove();
+                BaseMove move = root.getChildren().get(ab.getIdx()).getMove();
                 System.out.println(move);
                 move(move);
             }
@@ -110,7 +110,7 @@ public abstract class BaseGame {
         int selectedIdx = -1;
         for (int i = 0; i < node.getChildren().size(); i++) {
             Node<T> child = node.getChildren().get(i);
-            int value = -1 * alphabeta(child, depth - 1, -1 * beta, -1 * alpha).val;
+            int value = -1 * alphabeta(child, depth - 1, -1 * beta, -1 * alpha).getVal();
             if (value > alpha) {
                 alpha = value;
                 selectedIdx = i;
