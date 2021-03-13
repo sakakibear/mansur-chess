@@ -1,102 +1,78 @@
 package game.tictactoe;
 
 import static game.tictactoe.Constants.BOARD_SIZE;
-import static game.tictactoe.Constants.DEFAULT_SEARCH_DEPTH;
 import static game.tictactoe.Constants.PIECES;
 import static game.tictactoe.Constants.PLAYER_1;
 import static game.tictactoe.Constants.PLAYER_2;
 import static game.tictactoe.Constants.VALUE_LOSE;
-import static game.tictactoe.Constants.VALUE_LOWER_BOUND;
-import static game.tictactoe.Constants.VALUE_UPPER_BOUND;
 import static game.tictactoe.Constants.VALUE_WIN;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class TicTacToe {
+import game.BaseGame;
+import game.BaseMove;
+
+public class TicTacToe extends BaseGame {
 
     // Chess board
-    private int[][] board;
+    // protected Board board;
     // Evaluator
-    private Evaluator evaluator;
+    // protected NewAI evaluator;
     // Scanner to get user input
-    private Scanner scanner;
+    protected Scanner scanner;
 
-    public TicTacToe() {
-        board = new int[BOARD_SIZE][BOARD_SIZE];
+    public static void main(String[] args) {
+        TicTacToe game = new TicTacToe();
+        game.run(args);
+    }
+
+    @Override
+    public void init(String[] args) {
+        super.init(args);
+        board = new Board();
         evaluator = new Evaluator();
         scanner = new Scanner(System.in);
     }
 
-    public static void main(String[] args) {
-        TicTacToe game = new TicTacToe();
-        int depth = DEFAULT_SEARCH_DEPTH;
-        int curPlayer = PLAYER_1;
-        boolean[] isHuman = new boolean[PLAYER_2 + 1];
-        isHuman[PLAYER_1] = true;
-        isHuman[PLAYER_2] = false;
-
-        // Command line option
-        try {
-            for (int i = 0; i < args.length; i++) {
-                if (args[i].equals("-depth")) {
-                    // Depth of game tree searching
-                    depth = Integer.parseInt(args[++i]);
-                } else if (args[i].equals("-md")) {
-                    // Human player moves defensive
-                    isHuman[PLAYER_1] = false;
-                    isHuman[PLAYER_2] = true;
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("Invalid option. See README.md.");
-            return;
-        }
-
-        while (true) {
-            game.printBoard();
-            if (game.isGameOver(curPlayer))
-                break;
-            if (isHuman[curPlayer]) {
-                // Human player
-                game.move(game.getPlayerMove(curPlayer));
-            } else {
-                // PC
-                Node root = game.makeTree(curPlayer, null, depth);
-                SearchResult ab = game.alphabeta(root, depth, VALUE_LOWER_BOUND, VALUE_UPPER_BOUND);
-                Move move = root.getChildren().get(ab.idx).getMove();
-                System.out.printf("[%c] > %s\n", PIECES[curPlayer], move);
-                game.move(move);
-            }
-            // Switch current player
-            curPlayer = curPlayer == PLAYER_1 ? PLAYER_2 : PLAYER_1;
-        }
-
-        int v = game.evaluate();
-        if (v > 0) {
-            System.out.printf("[%c] won.\n", PIECES[PLAYER_1]);
-        } else if (v < 0) {
-            System.out.printf("[%c] won.\n", PIECES[PLAYER_2]);
-        } else {
-            System.out.printf("Draw.\n");
-        }
+    @Override
+    protected boolean isGameOver(int player) {
+        List<Move> moves = getValidMoves(player);
+        if (moves.size() == 0)
+            return true;
+        int value = evaluate();
+        if (value == VALUE_WIN || value == VALUE_LOSE)
+            return true;
+        return false;
     }
 
-    private void printBoard() {
-        System.out.println("\n  a b c");
+    @Override
+    protected List<Move> getValidMoves(int player) {
+        List<Move> result = new ArrayList<Move>();
+        int value = evaluate();
+        if (value == VALUE_WIN || value == VALUE_LOSE)
+            return result;
         for (int i = 0; i < BOARD_SIZE; i++) {
-            System.out.printf("%d ", i + 1);
             for (int j = 0; j < BOARD_SIZE; j++) {
-                System.out.printf("%c ", PIECES[board[i][j]]);
+                Board b = (Board) board;
+                if (b.get(i, j) == 0)
+                    result.add(new Move(i, j, player));
             }
-            System.out.printf("%d", i + 1);
-            System.out.println();
         }
-        System.out.println("  a b c\n");
+        return result;
     }
 
-    private Move getPlayerMove(int curPlayer) {
+    @Override
+    protected void move(BaseMove move) {
+        // XXX upcast
+        Move m = (Move) move;
+        Board b = (Board) board;
+        b.set(m.getX(), m.getY(), m.getPlayer());
+    }
+
+    @Override
+    protected Move getPlayerMove(int curPlayer) {
         while (true) {
             System.out.printf("[%c] > ", PIECES[curPlayer]);
             String str = scanner.nextLine();
@@ -113,117 +89,25 @@ public class TicTacToe {
                 y = tmp;
             }
             if (x >= '1' && x <= '3' && y >= 'a' && y <= 'c') {
-                if (board[x - '1'][y - 'a'] != 0)
+                // XXX upcast
+                Board b = (Board) board;
+                if (b.get(x - '1', y - 'a') != 0)
                     continue;
                 return new Move(x - '1', y - 'a', curPlayer);
             }
         }
     }
 
-    private boolean isGameOver(int curPlayer) {
-        List<Move> moves = getValidMoves(curPlayer);
-        if (moves.size() == 0)
-            return true;
-        int value = evaluate();
-        if (value == VALUE_WIN || value == VALUE_LOSE)
-            return true;
-        return false;
-    }
-
-    private int evaluate() {
-        return evaluator.evaluate(board);
-    }
-
-    /**
-     * Generate all possible next moves.
-     * 
-     * @param player
-     * @return list of moves
-     */
-    private List<Move> getValidMoves(int player) {
-        List<Move> result = new ArrayList<Move>();
-        int value = evaluate();
-        if (value == VALUE_WIN || value == VALUE_LOSE)
-            return result;
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                if (board[i][j] == 0)
-                    result.add(new Move(i, j, player));
-            }
+    @Override
+    protected void showResult() {
+        int v = evaluate();
+        if (v > 0) {
+            System.out.printf("[%c] won.\n", PIECES[PLAYER_1]);
+        } else if (v < 0) {
+            System.out.printf("[%c] won.\n", PIECES[PLAYER_2]);
+        } else {
+            System.out.printf("Draw.\n");
         }
-        return result;
     }
 
-    private void move(Move move) {
-        board[move.getX()][move.getY()] = move.getPlayer();
-    }
-
-    /**
-     * Build the search tree. Root is current state of game.
-     * 
-     * @param curPlayer
-     * @param move
-     * @param depth
-     * @return search tree
-     */
-    private Node makeTree(int curPlayer, Move move, int depth) {
-        Node root = new Node();
-        List<Move> moves = getValidMoves(curPlayer);
-        if (depth == 0 || moves.size() == 0) {
-            // Evaluation is based on player 1
-            int v = evaluate() * (curPlayer == PLAYER_1 ? 1 : -1);
-            root.setVal(v);
-        }
-        root.setMove(move);
-        if (depth > 0) {
-            for (Move m : moves) {
-                int[][] backup = copyBoard();
-                move(m);
-                // Switch player
-                root.addChild(makeTree(curPlayer == PLAYER_1 ? PLAYER_2 : PLAYER_1, m, depth - 1));
-                restoreBoard(backup);
-            }
-        }
-        return root;
-    }
-
-    private int[][] copyBoard() {
-        int[][] copied = new int[BOARD_SIZE][BOARD_SIZE];
-        for (int i = 0; i < BOARD_SIZE; i++)
-            for (int j = 0; j < BOARD_SIZE; j++)
-                copied[i][j] = board[i][j];
-        return copied;
-    }
-
-    private void restoreBoard(int[][] board) {
-        for (int i = 0; i < BOARD_SIZE; i++)
-            for (int j = 0; j < BOARD_SIZE; j++)
-                this.board[i][j] = board[i][j];
-    }
-
-    /**
-     * Alpha-beta pruning search of a game tree.
-     * 
-     * @param node
-     * @param depth
-     * @param alpha
-     * @param beta
-     * @return search result
-     */
-    private SearchResult alphabeta(Node node, int depth, int alpha, int beta) {
-        if (depth == 0 || node.getChildren().size() == 0)
-            return new SearchResult(node.getVal(), -1);
-        int selectedIdx = -1;
-        for (int i = 0; i < node.getChildren().size(); i++) {
-            Node child = node.getChildren().get(i);
-            int value = -1 * alphabeta(child, depth - 1, -1 * beta, -1 * alpha).val;
-            if (value > alpha) {
-                alpha = value;
-                selectedIdx = i;
-            }
-            if (alpha > beta)
-                return new SearchResult(alpha, selectedIdx);
-        }
-        return new SearchResult(alpha, selectedIdx);
-    }
 }
