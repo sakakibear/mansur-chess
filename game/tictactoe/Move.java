@@ -1,10 +1,14 @@
 package game.tictactoe;
 
+import static game.tictactoe.Constants.PIECES;
+
+import game.BaseMove;
+
 /**
  * A player's move in the chess. In Tic-Tac-Toe, it contains of the position (x,
  * y) and the player who made this move.
  */
-public class Move {
+public class Move extends BaseMove {
 
     private int x;
     private int y;
@@ -30,6 +34,6 @@ public class Move {
 
     @Override
     public String toString() {
-        return String.format("%c%d", (char) ('a' + y), (x + 1));
+        return String.format("[%c] > %c%d", PIECES[player], (char) ('a' + y), (x + 1));
     }
 }
