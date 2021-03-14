@@ -15,7 +15,7 @@ public class Evaluator extends BaseEvaluator {
 
     @Override
     public int evaluate(BaseBoard board) {
-        // TODO by Song
+        // TODO Could be solved using generic
         Board b = (Board) board;
         int value = 0;
         // check the rows
