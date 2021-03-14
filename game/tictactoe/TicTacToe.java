@@ -16,10 +16,6 @@ import game.BaseMove;
 
 public class TicTacToe extends BaseGame {
 
-    // Chess board
-    // protected Board board;
-    // Evaluator
-    // protected NewAI evaluator;
     // Scanner to get user input
     protected Scanner scanner;
 
