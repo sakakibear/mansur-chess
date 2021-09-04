@@ -1,7 +1,10 @@
 package game.othello;
 
 import static game.othello.Constants.BOARD_SIZE;
-import static game.othello.Constants.PIECES;
+import static game.othello.Constants.DARK;
+import static game.othello.Constants.DISCS;
+import static game.othello.Constants.EMPTY;
+import static game.othello.Constants.LIGHT;
 
 import game.BaseBoard;
 
@@ -39,7 +42,7 @@ public class Board extends BaseBoard {
         for (int i = 0; i < BOARD_SIZE; i++) {
             sb.append(String.format("%d ", i + 1));
             for (int j = 0; j < BOARD_SIZE; j++) {
-                sb.append(String.format("%c ", PIECES[board[i][j]]));
+                sb.append(String.format("%c ", DISCS[board[i][j]]));
             }
             sb.append(String.format("%d ", i + 1));
             sb.append("\n");
@@ -58,5 +61,13 @@ public class Board extends BaseBoard {
 
     public void set(int i, int j, int val) {
         board[i][j] = val;
+    }
+
+    public void init() {
+        for (int i = 0; i < BOARD_SIZE; i++)
+            for (int j = 0; j < BOARD_SIZE; j++)
+                board[i][j] = EMPTY;
+        board[3][4] = board[4][3] = DARK;
+        board[3][3] = board[4][4] = LIGHT;
     }
 }

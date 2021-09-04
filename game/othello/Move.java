@@ -1,6 +1,6 @@
 package game.othello;
 
-import static game.othello.Constants.PIECES;
+import static game.othello.Constants.DISCS;
 
 import game.BaseMove;
 
@@ -31,7 +31,9 @@ public class Move extends BaseMove {
 
     @Override
     public String toString() {
-        return String.format("[%c] > %c%d", PIECES[player], PIECES[player], (char) ('a' + y), (x + 1));
+        if (isPass)
+            return String.format("[%c] > PASS", DISCS[player]);
+        return String.format("[%c] > %c%d", DISCS[player], (char) ('a' + y), (x + 1));
     }
 
     public int getX() {

@@ -7,10 +7,10 @@ public final class Constants {
 
     // Game
     public static final int BOARD_SIZE = 8;
-    public static final int DEFAULT_SEARCH_DEPTH = 5;
-    public static final int PLAYER_DARK = 1;
-    public static final int PLAYER_LIGHT = 2;
-    public static final char[] PIECES = { ' ', '¡ñ', '¡ð' };
+    public static final int EMPTY = 0;
+    public static final int DARK = 1;
+    public static final int LIGHT = 2;
+    public static final char[] DISCS = { ' ', '¡ñ', '¡ð' };
 
     // Evaluation
     public static final int VALUE_WIN = 10000;
