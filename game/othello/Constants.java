@@ -1,5 +1,7 @@
 package game.othello;
 
+import static game.Constants.VALUE_UPPER_BOUND;
+
 public final class Constants {
 
     private Constants() {
@@ -13,8 +15,6 @@ public final class Constants {
     public static final char[] DISCS = { ' ', '¡ñ', '¡ð' };
 
     // Evaluation
-    public static final int VALUE_WIN = 10000;
+    public static final int VALUE_WIN = VALUE_UPPER_BOUND - 1;
     public static final int VALUE_LOSE = -VALUE_WIN;
-    public static final int VALUE_UPPER_BOUND = VALUE_WIN + 1;
-    public static final int VALUE_LOWER_BOUND = -VALUE_UPPER_BOUND;
 }

@@ -1,14 +1,11 @@
 package game.othello;
 
-import static game.Constants.PLAYER_1;
-import static game.Constants.PLAYER_2;
 import static game.othello.Constants.BOARD_SIZE;
 import static game.othello.Constants.DARK;
 import static game.othello.Constants.DISCS;
 import static game.othello.Constants.LIGHT;
 
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 
 import game.BaseGame;
@@ -24,38 +21,6 @@ public class Othello extends BaseGame {
     // Scanner to get user input
     protected Scanner scanner;
 
-    // XXX for test
-    @Override
-    public void run(String[] args) {
-        init(args);
-        Random rand = new Random();
-        int curPlayer = PLAYER_1;
-        while (true) {
-            System.out.println();
-            System.out.println(board);
-
-            if (isGameOver(curPlayer))
-                break;
-
-            List<Move> moves = getValidMoves(curPlayer);
-            // System.out.println("\nPossible moves:\n");
-            // for (Move m : moves)
-            // System.out.println(m);
-
-            if (isHumanPlayer(curPlayer)) {
-                move(getPlayerMove(curPlayer));
-            } else {
-                int idx = rand.nextInt(moves.size());
-                Move m = moves.get(idx);
-                System.out.println(m);
-                move(m);
-            }
-            // Switch player
-            curPlayer = curPlayer == PLAYER_1 ? PLAYER_2 : PLAYER_1;
-        }
-        showResult();
-    }
-
     public static void main(String[] args) {
         Othello game = new Othello();
         game.run(args);
@@ -67,7 +32,7 @@ public class Othello extends BaseGame {
         Board othelloBoard = new Board();
         board = othelloBoard;
         othelloBoard.init();
-        // TODO evaluator
+        evaluator = new Evaluator();
         scanner = new Scanner(System.in);
     }
 
