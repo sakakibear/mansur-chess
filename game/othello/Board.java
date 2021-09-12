@@ -38,6 +38,7 @@ public class Board extends BaseBoard {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("\n");
         sb.append("  a b c d e f g h\n");
         for (int i = 0; i < BOARD_SIZE; i++) {
             sb.append(String.format("%d ", i + 1));
