@@ -86,9 +86,9 @@ public class Othello extends BaseGame {
 
     @Override
     protected void showResult() {
-        // ¡ñ 18:46 ¡ğ
-        // ¡ñ 60: 1 ¡ğ
-        // ¡ñ 32:32 ¡ğ
+        // â— 18:46 â—‹
+        // â— 60: 1 â—‹
+        // â— 32:32 â—‹
         Board b = (Board) board;
         int cntDark = 0, cntLight = 0;
         for (int i = 0; i < BOARD_SIZE; i++)

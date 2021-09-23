@@ -12,7 +12,7 @@ public final class Constants {
     public static final int EMPTY = 0;
     public static final int DARK = 1;
     public static final int LIGHT = 2;
-    public static final char[] DISCS = { ' ', '°Ò', '°' };
+    public static final char[] DISCS = { ' ', '‚óè', '‚óã' };
 
     // Evaluation
     public static final int VALUE_WIN = VALUE_UPPER_BOUND - 1;
