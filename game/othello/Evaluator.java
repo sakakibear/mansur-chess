@@ -39,7 +39,7 @@ public class Evaluator extends BaseEvaluator {
             else
                 return VALUE_LOSE;
         }
-        return darkCnt - lightCnt + 0;
+        return darkCnt - lightCnt + getCornerAdjustment(b);
     }
 
     protected int getCornerAdjustment(Board board) {
