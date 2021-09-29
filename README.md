@@ -3,7 +3,8 @@
 ## Introduction
 
 A chess game using alpha-beta pruning.
-It can play Tic-Tac-Toe with human user.
+It can play games such as Tic-Tac-Toe with human user.
+Othello game implemented in Sep. 2021.
 More games are going to be implemented in the future.
 
 ## Compile and run
@@ -12,9 +13,19 @@ More games are going to be implemented in the future.
 
 `java game.tictactoe.TicTacToe`
 
+or
+
+`javac game/othello/Othello.java`
+
+`java game.othello.Othello`
+
 ## Usage
 
 `TicTacToe [-depth n] [-md]`
+
+or
+
+`Othello [-depth n] [-md]`
 
 ### Options
 
