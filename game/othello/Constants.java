@@ -17,4 +17,6 @@ public final class Constants {
     // Evaluation
     public static final int VALUE_WIN = VALUE_UPPER_BOUND - 1;
     public static final int VALUE_LOSE = -VALUE_WIN;
+    public static final int CORNER_POINT = 8;
+    public static final int UNSTABLE_X_DEDUCTION = 5;
 }
