@@ -10,7 +10,7 @@ public class Board extends BaseBoard {
     protected int[][] board;
 
     @Override
-    public BaseBoard clone() {
+    public Board clone() {
         Board cloned = new Board();
         for (int i = 0; i < board.length; i++)
             for (int j = 0; j < board[0].length; j++)
