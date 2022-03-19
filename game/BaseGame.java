@@ -11,9 +11,9 @@ import java.util.List;
 /**
  * Abstract base class of a two-player game.
  */
-public abstract class BaseGame {
+public abstract class BaseGame<B extends BaseBoard> {
 
-    protected BaseBoard board;
+    protected B board;
     protected BaseEvaluator evaluator;
     protected int depth;
     protected boolean[] isHumanPlayer;
@@ -88,7 +88,8 @@ public abstract class BaseGame {
         root.setMove(move);
         if (depth > 0) {
             for (BaseMove m : moves) {
-                BaseBoard backupBoard = board.clone();
+                @SuppressWarnings("unchecked")
+                B backupBoard = (B) board.clone();
                 move(m);
                 // TODO Could be solved using generic (Board, Move)
                 @SuppressWarnings("unchecked")

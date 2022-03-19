@@ -14,7 +14,7 @@ import game.BaseMove;
 /**
  * TODO Use generic instead of casting like (Board) board.
  */
-public class Othello extends BaseGame {
+public class Othello extends BaseGame<Board> {
 
     protected Rule rule = Rule.getInstance();
 
@@ -38,17 +38,17 @@ public class Othello extends BaseGame {
 
     @Override
     protected boolean isGameOver(int player) {
-        return rule.isGameOver((Board) board);
+        return rule.isGameOver(board);
     }
 
     @Override
     protected List<Move> getValidMoves(int player) {
-        return rule.getMoves((Board) board, player);
+        return rule.getMoves(board, player);
     }
 
     @Override
     protected void move(BaseMove move) {
-        rule.takeMove((Board) board, (Move) move);
+        rule.takeMove(board, (Move) move);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class Othello extends BaseGame {
                 cy = tmp;
             }
             int x = cx - '1', y = cy - 'a';
-            if (rule.isValidMove((Board) board, player, x, y))
+            if (rule.isValidMove(board, player, x, y))
                 return new Move(x, y, player);
         }
     }
@@ -89,7 +89,7 @@ public class Othello extends BaseGame {
         // ● 18:46 ○
         // ● 60: 1 ○
         // ● 32:32 ○
-        Board b = (Board) board;
+        Board b = board;
         int cntDark = 0, cntLight = 0;
         for (int i = 0; i < BOARD_SIZE; i++)
             for (int j = 0; j < BOARD_SIZE; j++)
