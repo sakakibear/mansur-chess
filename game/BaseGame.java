@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Abstract base class of a two-player game.
  */
-public abstract class BaseGame<B extends BaseBoard> {
+public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
 
     protected B board;
     protected BaseEvaluator evaluator;
@@ -43,11 +43,11 @@ public abstract class BaseGame<B extends BaseBoard> {
 
     abstract protected boolean isGameOver(int player);
 
-    abstract protected List<? extends BaseMove> getValidMoves(int player);
+    abstract protected List<M> getValidMoves(int player);
 
-    abstract protected void move(BaseMove move);
+    abstract protected void move(M move);
 
-    abstract protected BaseMove getPlayerMove(int player);
+    abstract protected M getPlayerMove(int player);
 
     abstract protected void showResult();
 
@@ -61,9 +61,9 @@ public abstract class BaseGame<B extends BaseBoard> {
             if (isHumanPlayer(curPlayer)) {
                 move(getPlayerMove(curPlayer));
             } else {
-                Node<? extends BaseMove> root = makeTree(curPlayer, null, depth);
+                Node<M> root = makeTree(curPlayer, null, depth);
                 SearchResult ab = alphabeta(root, depth, VALUE_LOWER_BOUND, VALUE_UPPER_BOUND);
-                BaseMove move = root.getChildren().get(ab.getIdx()).getMove();
+                M move = root.getChildren().get(ab.getIdx()).getMove();
                 System.out.println(move);
                 move(move);
             }
@@ -77,9 +77,9 @@ public abstract class BaseGame<B extends BaseBoard> {
         return isHumanPlayer[player];
     }
 
-    protected <T extends BaseMove> Node<T> makeTree(int curPlayer, T move, int depth) {
-        Node<T> root = new Node<T>();
-        List<? extends BaseMove> moves = getValidMoves(curPlayer);
+    protected Node<M> makeTree(int curPlayer, M move, int depth) {
+        Node<M> root = new Node<M>();
+        List<M> moves = getValidMoves(curPlayer);
         if (depth == 0 || moves.size() == 0) {
             // Evaluation is based on player 1
             int v = evaluate() * (curPlayer == PLAYER_1 ? 1 : -1);
@@ -87,15 +87,12 @@ public abstract class BaseGame<B extends BaseBoard> {
         }
         root.setMove(move);
         if (depth > 0) {
-            for (BaseMove m : moves) {
+            for (M m : moves) {
                 @SuppressWarnings("unchecked")
                 B backupBoard = (B) board.clone();
                 move(m);
-                // TODO Could be solved using generic (Board, Move)
-                @SuppressWarnings("unchecked")
-                T tMove = (T) m;
                 // Switch player
-                root.addChild(makeTree(curPlayer == PLAYER_1 ? PLAYER_2 : PLAYER_1, tMove, depth - 1));
+                root.addChild(makeTree(curPlayer == PLAYER_1 ? PLAYER_2 : PLAYER_1, m, depth - 1));
                 board = backupBoard;
             }
         }
@@ -106,12 +103,12 @@ public abstract class BaseGame<B extends BaseBoard> {
         return evaluator.evaluate(board);
     }
 
-    protected <T extends BaseMove> SearchResult alphabeta(Node<T> node, int depth, int alpha, int beta) {
+    protected SearchResult alphabeta(Node<M> node, int depth, int alpha, int beta) {
         if (depth == 0 || node.getChildren().size() == 0)
             return new SearchResult(node.getVal(), -1);
         int selectedIdx = -1;
         for (int i = 0; i < node.getChildren().size(); i++) {
-            Node<T> child = node.getChildren().get(i);
+            Node<M> child = node.getChildren().get(i);
             int value = -1 * alphabeta(child, depth - 1, -1 * beta, -1 * alpha).getVal();
             if (value > alpha) {
                 alpha = value;

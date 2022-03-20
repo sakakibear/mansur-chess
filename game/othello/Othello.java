@@ -9,12 +9,11 @@ import java.util.List;
 import java.util.Scanner;
 
 import game.BaseGame;
-import game.BaseMove;
 
 /**
  * TODO Use generic instead of casting like (Board) board.
  */
-public class Othello extends BaseGame<Board> {
+public class Othello extends BaseGame<Board, Move> {
 
     protected Rule rule = Rule.getInstance();
 
@@ -47,8 +46,8 @@ public class Othello extends BaseGame<Board> {
     }
 
     @Override
-    protected void move(BaseMove move) {
-        rule.takeMove(board, (Move) move);
+    protected void move(Move move) {
+        rule.takeMove(board, move);
     }
 
     @Override

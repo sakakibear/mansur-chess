@@ -12,9 +12,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import game.BaseGame;
-import game.BaseMove;
 
-public class TicTacToe extends BaseGame<Board> {
+public class TicTacToe extends BaseGame<Board, Move> {
 
     // Scanner to get user input
     protected Scanner scanner;
@@ -60,9 +59,9 @@ public class TicTacToe extends BaseGame<Board> {
     }
 
     @Override
-    protected void move(BaseMove move) {
+    protected void move(Move move) {
         // TODO Could be solved using generic
-        Move m = (Move) move;
+        Move m = move;
         Board b = board;
         b.set(m.getX(), m.getY(), m.getPlayer());
     }
