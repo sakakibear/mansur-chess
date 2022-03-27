@@ -60,10 +60,7 @@ public class TicTacToe extends BaseGame<Board, Move> {
 
     @Override
     protected void move(Move move) {
-        // TODO Could be solved using generic
-        Move m = move;
-        Board b = board;
-        b.set(m.getX(), m.getY(), m.getPlayer());
+        board.set(move.getX(), move.getY(), move.getPlayer());
     }
 
     @Override
@@ -84,9 +81,7 @@ public class TicTacToe extends BaseGame<Board, Move> {
                 y = tmp;
             }
             if (x >= '1' && x <= '3' && y >= 'a' && y <= 'c') {
-                // TODO Could be solved using generic
-                Board b = board;
-                if (b.get(x - '1', y - 'a') != 0)
+                if (board.get(x - '1', y - 'a') != 0)
                     continue;
                 return new Move(x - '1', y - 'a', curPlayer);
             }
