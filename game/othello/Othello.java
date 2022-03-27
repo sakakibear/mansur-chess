@@ -10,9 +10,6 @@ import java.util.Scanner;
 
 import game.BaseGame;
 
-/**
- * TODO Use generic instead of casting like (Board) board.
- */
 public class Othello extends BaseGame<Board, Move> {
 
     protected Rule rule = Rule.getInstance();
@@ -28,9 +25,8 @@ public class Othello extends BaseGame<Board, Move> {
     @Override
     public void init(String[] args) {
         super.init(args);
-        Board othelloBoard = new Board();
-        board = othelloBoard;
-        othelloBoard.init();
+        board = new Board();
+        board.init();
         evaluator = new Evaluator();
         scanner = new Scanner(System.in);
     }
@@ -88,13 +84,12 @@ public class Othello extends BaseGame<Board, Move> {
         // ● 18:46 ○
         // ● 60: 1 ○
         // ● 32:32 ○
-        Board b = board;
         int cntDark = 0, cntLight = 0;
         for (int i = 0; i < BOARD_SIZE; i++)
             for (int j = 0; j < BOARD_SIZE; j++)
-                if (b.get(i, j) == DARK)
+                if (board.get(i, j) == DARK)
                     cntDark++;
-                else if (b.get(i, j) == LIGHT)
+                else if (board.get(i, j) == LIGHT)
                     cntLight++;
         System.out.printf("%c %2d:%2d %c", DISCS[DARK], cntDark, cntLight, DISCS[LIGHT]);
         System.out.println();
