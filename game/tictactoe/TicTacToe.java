@@ -50,8 +50,7 @@ public class TicTacToe extends BaseGame<Board, Move> {
             return result;
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                Board b = board;
-                if (b.get(i, j) == 0)
+                if (board.get(i, j) == 0)
                     result.add(new Move(i, j, player));
             }
         }
