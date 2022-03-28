@@ -9,12 +9,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import game.BaseGame;
-import game.BaseMove;
 
-/**
- * TODO Use generic instead of casting like (Board) board.
- */
-public class Othello extends BaseGame {
+public class Othello extends BaseGame<Board, Move> {
 
     protected Rule rule = Rule.getInstance();
 
@@ -29,26 +25,25 @@ public class Othello extends BaseGame {
     @Override
     public void init(String[] args) {
         super.init(args);
-        Board othelloBoard = new Board();
-        board = othelloBoard;
-        othelloBoard.init();
+        board = new Board();
+        board.init();
         evaluator = new Evaluator();
         scanner = new Scanner(System.in);
     }
 
     @Override
     protected boolean isGameOver(int player) {
-        return rule.isGameOver((Board) board);
+        return rule.isGameOver(board);
     }
 
     @Override
     protected List<Move> getValidMoves(int player) {
-        return rule.getMoves((Board) board, player);
+        return rule.getMoves(board, player);
     }
 
     @Override
-    protected void move(BaseMove move) {
-        rule.takeMove((Board) board, (Move) move);
+    protected void move(Move move) {
+        rule.takeMove(board, move);
     }
 
     @Override
@@ -79,7 +74,7 @@ public class Othello extends BaseGame {
                 cy = tmp;
             }
             int x = cx - '1', y = cy - 'a';
-            if (rule.isValidMove((Board) board, player, x, y))
+            if (rule.isValidMove(board, player, x, y))
                 return new Move(x, y, player);
         }
     }
@@ -89,13 +84,12 @@ public class Othello extends BaseGame {
         // ● 18:46 ○
         // ● 60: 1 ○
         // ● 32:32 ○
-        Board b = (Board) board;
         int cntDark = 0, cntLight = 0;
         for (int i = 0; i < BOARD_SIZE; i++)
             for (int j = 0; j < BOARD_SIZE; j++)
-                if (b.get(i, j) == DARK)
+                if (board.get(i, j) == DARK)
                     cntDark++;
-                else if (b.get(i, j) == LIGHT)
+                else if (board.get(i, j) == LIGHT)
                     cntLight++;
         System.out.printf("%c %2d:%2d %c", DISCS[DARK], cntDark, cntLight, DISCS[LIGHT]);
         System.out.println();

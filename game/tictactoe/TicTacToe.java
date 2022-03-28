@@ -12,9 +12,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import game.BaseGame;
-import game.BaseMove;
 
-public class TicTacToe extends BaseGame {
+public class TicTacToe extends BaseGame<Board, Move> {
 
     // Scanner to get user input
     protected Scanner scanner;
@@ -51,8 +50,7 @@ public class TicTacToe extends BaseGame {
             return result;
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                Board b = (Board) board;
-                if (b.get(i, j) == 0)
+                if (board.get(i, j) == 0)
                     result.add(new Move(i, j, player));
             }
         }
@@ -60,11 +58,8 @@ public class TicTacToe extends BaseGame {
     }
 
     @Override
-    protected void move(BaseMove move) {
-        // TODO Could be solved using generic
-        Move m = (Move) move;
-        Board b = (Board) board;
-        b.set(m.getX(), m.getY(), m.getPlayer());
+    protected void move(Move move) {
+        board.set(move.getX(), move.getY(), move.getPlayer());
     }
 
     @Override
@@ -85,9 +80,7 @@ public class TicTacToe extends BaseGame {
                 y = tmp;
             }
             if (x >= '1' && x <= '3' && y >= 'a' && y <= 'c') {
-                // TODO Could be solved using generic
-                Board b = (Board) board;
-                if (b.get(x - '1', y - 'a') != 0)
+                if (board.get(x - '1', y - 'a') != 0)
                     continue;
                 return new Move(x - '1', y - 'a', curPlayer);
             }
