@@ -64,4 +64,93 @@ public class Evaluator extends BaseEvaluator {
         else
             return -CORNER_POINT;
     }
+
+    protected boolean isStable(Board board, int m, int n) {
+        int disc = board.get(m, n);
+        if (disc == EMPTY)
+            return false;
+
+        // At corner
+        if ((m == 0 || m == BOARD_SIZE - 1) && (n == 0 || n == BOARD_SIZE - 1)) {
+            return true;
+        }
+
+        // On an edge
+        if (m == 0 || m == BOARD_SIZE - 1) {
+            // The edge is all filled
+            boolean flag = true;
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (board.get(m, j) == EMPTY) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag)
+                return true;
+            // All the same colour to corner on either direction
+            flag = true;
+            for (int j = 0; j < n; j++) {
+                if (disc != board.get(m, j)) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag)
+                return true;
+            flag = true;
+            for (int j = n + 1; j < BOARD_SIZE; j++) {
+                if (disc != board.get(m, j)) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag)
+                return true;
+        } else if (n == 0 || n == BOARD_SIZE - 1) {
+            // The edge is all filled
+            boolean flag = true;
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                if (board.get(i, n) == EMPTY) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag)
+                return true;
+            // All the same colour to corner on either direction
+            flag = true;
+            for (int i = 0; i < m; i++) {
+                if (disc != board.get(i, n)) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag)
+                return true;
+            flag = true;
+            for (int i = m + 1; i < BOARD_SIZE; i++) {
+                if (disc != board.get(i, n)) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag)
+                return true;
+        }
+
+        // If all 8 directions are filled
+        // False does not exactly mean it's unstable
+        int[][] dirs = { {0, -1}, {-1, -1}, {-1, 0}, {-1, 1} };
+        for (int[] dir : dirs) {
+            for (int i = m, j = n; i >= 0 && i < BOARD_SIZE && j >= 0 && j < BOARD_SIZE; i += dir[0], j += dir[1]) {
+                if (board.get(i, j) == EMPTY)
+                    return false;
+            }
+            for (int i = m, j = n; i >= 0 && i < BOARD_SIZE && j >= 0 && j < BOARD_SIZE; i -= dir[0], j -= dir[1]) {
+                if (board.get(i, j) == EMPTY)
+                    return false;
+            }
+        }
+        return true;
+    }
 }
