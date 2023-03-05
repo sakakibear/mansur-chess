@@ -29,7 +29,7 @@ public class Rule {
     protected static int[][] dirs = { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 1 }, { 1, -1 }, { 1, 0 },
             { 1, 1 }, };
 
-    protected boolean isValidMove(Board board, int player, int x, int y) {
+    public boolean isValidMove(Board board, int player, int x, int y) {
         if (x < 0 || x >= BOARD_SIZE || y < 0 || y >= BOARD_SIZE)
             return false;
         if (board.get(x, y) != EMPTY)
