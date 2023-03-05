@@ -5,6 +5,7 @@ import static game.othello.Constants.CORNER_POINT;
 import static game.othello.Constants.DARK;
 import static game.othello.Constants.EMPTY;
 import static game.othello.Constants.LIGHT;
+import static game.othello.Constants.STABLE_POINT;
 import static game.othello.Constants.UNSTABLE_X_DEDUCTION;
 import static game.othello.Constants.VALUE_LOSE;
 import static game.othello.Constants.VALUE_WIN;
@@ -39,7 +40,18 @@ public class Evaluator extends BaseEvaluator {
             else
                 return VALUE_LOSE;
         }
-        return darkCnt - lightCnt + getCornerAdjustment(b);
+        // Calculate additional scores of stable discs
+        int stableAdjustment = 0;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                int disc = b.get(i, j);
+                int pt = isStable(b, i, j) ? STABLE_POINT : 0;
+                if (disc == LIGHT)
+                    pt *= -1;
+                stableAdjustment += pt;
+            }
+        }
+        return darkCnt - lightCnt + stableAdjustment + getCornerAdjustment(b);
     }
 
     protected int getCornerAdjustment(Board board) {
