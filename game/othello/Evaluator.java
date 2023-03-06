@@ -1,12 +1,12 @@
 package game.othello;
 
 import static game.othello.Constants.BOARD_SIZE;
-import static game.othello.Constants.CORNER_POINT;
+import static game.othello.Constants.CORNER_SCORE;
 import static game.othello.Constants.DARK;
 import static game.othello.Constants.EMPTY;
 import static game.othello.Constants.LIGHT;
-import static game.othello.Constants.STABLE_POINT;
-import static game.othello.Constants.UNSTABLE_X_DEDUCTION;
+import static game.othello.Constants.STABLE_SCORE;
+import static game.othello.Constants.UNSTABLE_X_SCORE;
 import static game.othello.Constants.VALUE_LOSE;
 import static game.othello.Constants.VALUE_WIN;
 
@@ -45,7 +45,7 @@ public class Evaluator extends BaseEvaluator {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 int disc = b.get(i, j);
-                int pt = isStable(b, i, j) ? STABLE_POINT : 0;
+                int pt = isStable(b, i, j) ? STABLE_SCORE : 0;
                 if (disc == LIGHT)
                     pt *= -1;
                 stableAdjustment += pt;
@@ -66,15 +66,15 @@ public class Evaluator extends BaseEvaluator {
     protected int getCornerValue(int corner, int x) {
         if (corner == EMPTY) {
             if (x == DARK)
-                return -UNSTABLE_X_DEDUCTION;
+                return UNSTABLE_X_SCORE;
             else if (x == LIGHT)
-                return UNSTABLE_X_DEDUCTION;
+                return -UNSTABLE_X_SCORE;
             return 0;
         }
         if (corner == DARK)
-            return CORNER_POINT;
+            return CORNER_SCORE;
         else
-            return -CORNER_POINT;
+            return -CORNER_SCORE;
     }
 
     protected boolean isStable(Board board, int m, int n) {
