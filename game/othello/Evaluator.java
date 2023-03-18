@@ -13,19 +13,17 @@ import static game.othello.Constants.VALUE_WIN;
 import game.BaseBoard;
 import game.BaseEvaluator;
 
-public class Evaluator extends BaseEvaluator {
+public class Evaluator extends BaseEvaluator<Board> {
 
     protected Rule rule = Rule.getInstance();
 
     @Override
-    public int evaluate(BaseBoard board) {
-        // TODO Could be solved using generic
-        Board b = (Board) board;
-        boolean isGameOver = rule.isGameOver(b);
+    public int evaluate(Board board) {
+        boolean isGameOver = rule.isGameOver(board);
         int darkCnt = 0, lightCnt = 0;
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                int disc = b.get(i, j);
+                int disc = board.get(i, j);
                 if (disc == DARK)
                     darkCnt++;
                 else if (disc == LIGHT)
@@ -44,14 +42,14 @@ public class Evaluator extends BaseEvaluator {
         int stableAdjustment = 0;
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                int disc = b.get(i, j);
-                int pt = isStable(b, i, j) ? STABLE_SCORE : 0;
+                int disc = board.get(i, j);
+                int pt = isStable(board, i, j) ? STABLE_SCORE : 0;
                 if (disc == LIGHT)
                     pt *= -1;
                 stableAdjustment += pt;
             }
         }
-        return darkCnt - lightCnt + stableAdjustment + getCornerAdjustment(b);
+        return darkCnt - lightCnt + stableAdjustment + getCornerAdjustment(board);
     }
 
     protected int getCornerAdjustment(Board board) {
