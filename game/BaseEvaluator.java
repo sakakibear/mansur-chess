@@ -3,7 +3,7 @@ package game;
 /**
  * Evaluates the score of a board.
  */
-public abstract class BaseEvaluator {
+public abstract class BaseEvaluator<B extends BaseBoard> {
     /**
      * Evaluate current state of game based on player1 and return the value.
      * Note: this function has the most influence on AI performance.
@@ -12,5 +12,5 @@ public abstract class BaseEvaluator {
      * @return value
      */
     // TODO Could be more adaptable if defined as long
-    public abstract int evaluate(BaseBoard board);
+    public abstract int evaluate(B board);
 }

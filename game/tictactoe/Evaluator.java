@@ -11,18 +11,16 @@ import static game.tictactoe.Constants.VALUE_WIN;
 import game.BaseBoard;
 import game.BaseEvaluator;
 
-public class Evaluator extends BaseEvaluator {
+public class Evaluator extends BaseEvaluator<Board> {
 
     @Override
-    public int evaluate(BaseBoard board) {
-        // TODO Could be solved using generic
-        Board b = (Board) board;
+    public int evaluate(Board board) {
         int value = 0;
         // check the rows
         for (int i = 0; i < BOARD_SIZE; i++) {
             int[] line = new int[BOARD_SIZE];
             for (int j = 0; j < BOARD_SIZE; j++) {
-                line[j] = b.get(i, j);
+                line[j] = board.get(i, j);
             }
             int v = getValueOfLine(line);
             if (v == VALUE_WIN || v == VALUE_LOSE)
@@ -33,7 +31,7 @@ public class Evaluator extends BaseEvaluator {
         for (int j = 0; j < BOARD_SIZE; j++) {
             int[] line = new int[BOARD_SIZE];
             for (int i = 0; i < BOARD_SIZE; i++) {
-                line[i] = b.get(i, j);
+                line[i] = board.get(i, j);
             }
             int v = getValueOfLine(line);
             if (v == VALUE_WIN || v == VALUE_LOSE)
@@ -43,14 +41,14 @@ public class Evaluator extends BaseEvaluator {
         // check the diagonal lines
         int[] line = new int[BOARD_SIZE];
         for (int i = 0; i < BOARD_SIZE; i++) {
-            line[i] = b.get(i, i);
+            line[i] = board.get(i, i);
         }
         int v = getValueOfLine(line);
         if (v == VALUE_WIN || v == VALUE_LOSE)
             return v;
         value += v;
         for (int i = 0; i < BOARD_SIZE; i++) {
-            line[i] = b.get(i, BOARD_SIZE - i - 1);
+            line[i] = board.get(i, BOARD_SIZE - i - 1);
         }
         v = getValueOfLine(line);
         if (v == VALUE_WIN || v == VALUE_LOSE)
