@@ -81,21 +81,8 @@ public class Evaluator extends BaseEvaluator<Board> {
 
         if (m == 0 || m == BOARD_SIZE - 1 || n == 0 || n == BOARD_SIZE - 1)
             return isStableOnEdge(board, m, n);
-
-        // If all 8 directions are filled
-        // False does not exactly mean it's unstable
-        int[][] dirs = { {0, -1}, {-1, -1}, {-1, 0}, {-1, 1} };
-        for (int[] dir : dirs) {
-            for (int i = m, j = n; i >= 0 && i < BOARD_SIZE && j >= 0 && j < BOARD_SIZE; i += dir[0], j += dir[1]) {
-                if (board.get(i, j) == EMPTY)
-                    return false;
-            }
-            for (int i = m, j = n; i >= 0 && i < BOARD_SIZE && j >= 0 && j < BOARD_SIZE; i -= dir[0], j -= dir[1]) {
-                if (board.get(i, j) == EMPTY)
-                    return false;
-            }
-        }
-        return true;
+        else
+            return isStableAllDirections(board, m, n);
     }
 
     protected boolean isStableOnEdge(Board board, int m, int n) {
@@ -152,5 +139,22 @@ public class Evaluator extends BaseEvaluator<Board> {
             return true;
 
         return false;
+    }
+
+    protected boolean isStableAllDirections(Board board, int m, int n) {
+        // If all 8 directions are filled
+        // False does not exactly mean it's unstable
+        int[][] dirs = { {0, -1}, {-1, -1}, {-1, 0}, {-1, 1} };
+        for (int[] dir : dirs) {
+            for (int i = m, j = n; i >= 0 && i < BOARD_SIZE && j >= 0 && j < BOARD_SIZE; i += dir[0], j += dir[1]) {
+                if (board.get(i, j) == EMPTY)
+                    return false;
+            }
+            for (int i = m, j = n; i >= 0 && i < BOARD_SIZE && j >= 0 && j < BOARD_SIZE; i -= dir[0], j -= dir[1]) {
+                if (board.get(i, j) == EMPTY)
+                    return false;
+            }
+        }
+        return true;
     }
 }
