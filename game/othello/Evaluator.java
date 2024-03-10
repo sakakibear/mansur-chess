@@ -10,7 +10,6 @@ import static game.othello.Constants.UNSTABLE_X_SCORE;
 import static game.othello.Constants.VALUE_LOSE;
 import static game.othello.Constants.VALUE_WIN;
 
-import game.BaseBoard;
 import game.BaseEvaluator;
 
 public class Evaluator extends BaseEvaluator<Board> {
