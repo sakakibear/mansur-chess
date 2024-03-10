@@ -80,73 +80,8 @@ public class Evaluator extends BaseEvaluator<Board> {
         if (disc == EMPTY)
             return false;
 
-        // At corner
-        if ((m == 0 || m == BOARD_SIZE - 1) && (n == 0 || n == BOARD_SIZE - 1)) {
-            return true;
-        }
-
-        // On an edge
-        if (m == 0 || m == BOARD_SIZE - 1) {
-            // The edge is all filled
-            boolean flag = true;
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                if (board.get(m, j) == EMPTY) {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag)
-                return true;
-            // All the same colour to corner on either direction
-            flag = true;
-            for (int j = 0; j < n; j++) {
-                if (disc != board.get(m, j)) {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag)
-                return true;
-            flag = true;
-            for (int j = n + 1; j < BOARD_SIZE; j++) {
-                if (disc != board.get(m, j)) {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag)
-                return true;
-        } else if (n == 0 || n == BOARD_SIZE - 1) {
-            // The edge is all filled
-            boolean flag = true;
-            for (int i = 0; i < BOARD_SIZE; i++) {
-                if (board.get(i, n) == EMPTY) {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag)
-                return true;
-            // All the same colour to corner on either direction
-            flag = true;
-            for (int i = 0; i < m; i++) {
-                if (disc != board.get(i, n)) {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag)
-                return true;
-            flag = true;
-            for (int i = m + 1; i < BOARD_SIZE; i++) {
-                if (disc != board.get(i, n)) {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag)
-                return true;
-        }
+        if (m == 0 || m == BOARD_SIZE - 1 || n == 0 || n == BOARD_SIZE - 1)
+            return isStableOnEdge(board, m, n);
 
         // If all 8 directions are filled
         // False does not exactly mean it's unstable
@@ -162,5 +97,61 @@ public class Evaluator extends BaseEvaluator<Board> {
             }
         }
         return true;
+    }
+
+    protected boolean isStableOnEdge(Board board, int m, int n) {
+        // Corner
+        if ((m == 0 || m == BOARD_SIZE - 1) && (n == 0 || n == BOARD_SIZE - 1))
+            return true;
+
+        int iStart, jStart;
+        int[] dir;
+        if (m == 0 || m == BOARD_SIZE - 1) {
+            iStart = m;
+            jStart = 0;
+            dir = new int[]{0, 1};
+        } else if (n == 0 || n == BOARD_SIZE - 1) {
+            iStart = 0;
+            jStart = n;
+            dir = new int[]{1, 0};
+        } else {
+            // Unexpected: not on edge
+            return false;
+        }
+
+        boolean flag = true;
+        // Check if the edge is all filled
+        for (int i = iStart, j = jStart; i < BOARD_SIZE && j < BOARD_SIZE; i += dir[0], j += dir[1]) {
+            if (board.get(i, j) == EMPTY) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag)
+            return true;
+
+        // Check if all discs are the same colour on either direction
+        int disc = board.get(m, n);
+        flag = true;
+        for (int i = m, j = n; i >= 0 && j >= 0; i -= dir[0], j -= dir[1]) {
+            if (disc != board.get(i, j)) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag)
+            return true;
+        // The other direction
+        flag = true;
+        for (int i = m, j = n; i < BOARD_SIZE && j < BOARD_SIZE; i += dir[0], j += dir[1]) {
+            if (disc != board.get(i, j)) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag)
+            return true;
+
+        return false;
     }
 }
