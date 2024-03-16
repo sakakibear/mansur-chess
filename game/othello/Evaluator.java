@@ -135,10 +135,7 @@ public class Evaluator extends BaseEvaluator<Board> {
                 break;
             }
         }
-        if (flag)
-            return true;
-
-        return false;
+        return flag;
     }
 
     protected boolean isStableAllDirections(Board board, int m, int n) {
