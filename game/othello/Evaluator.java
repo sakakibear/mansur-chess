@@ -79,10 +79,18 @@ public class Evaluator extends BaseEvaluator<Board> {
         if (disc == EMPTY)
             return false;
 
+        // Return cached value only if cache is true
+        if (board.getStableCache(m, n))
+            return true;
+
+        boolean result = false;
         if (m == 0 || m == BOARD_SIZE - 1 || n == 0 || n == BOARD_SIZE - 1)
-            return isStableOnEdge(board, m, n);
+            result = isStableOnEdge(board, m, n);
         else
-            return isStableAllDirections(board, m, n);
+            result = isStableAllDirections(board, m, n);
+        if (result)
+            board.setStableCache(m, n, true);
+        return result;
     }
 
     protected boolean isStableOnEdge(Board board, int m, int n) {
