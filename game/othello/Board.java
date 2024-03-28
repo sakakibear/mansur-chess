@@ -25,13 +25,17 @@ import game.BaseBoard;
 public class Board extends BaseBoard {
 
     protected int[][] board;
+    protected boolean[][] stableDiscCache;
 
     @Override
     public Board clone() {
         Board cloned = new Board();
-        for (int i = 0; i < board.length; i++)
-            for (int j = 0; j < board[0].length; j++)
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
                 cloned.board[i][j] = board[i][j];
+                cloned.stableDiscCache[i][j] = stableDiscCache[i][j];
+            }
+        }
         return cloned;
     }
 
@@ -54,6 +58,7 @@ public class Board extends BaseBoard {
 
     public Board() {
         board = new int[BOARD_SIZE][BOARD_SIZE];
+        stableDiscCache = new boolean[BOARD_SIZE][BOARD_SIZE];
     }
 
     public int get(int i, int j) {
@@ -64,10 +69,21 @@ public class Board extends BaseBoard {
         board[i][j] = val;
     }
 
+    public boolean getStableCache(int i, int j) {
+        return stableDiscCache[i][j];
+    }
+
+    public void setStableCache(int i, int j, boolean v) {
+        stableDiscCache[i][j] = v;
+    }
+
     public void init() {
-        for (int i = 0; i < BOARD_SIZE; i++)
-            for (int j = 0; j < BOARD_SIZE; j++)
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
                 board[i][j] = EMPTY;
+                stableDiscCache[i][j] = false;
+            }
+        }
         board[3][4] = board[4][3] = DARK;
         board[3][3] = board[4][4] = LIGHT;
     }
