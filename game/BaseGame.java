@@ -67,7 +67,7 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
         showResult();
     }
 
-    protected getPlayerMove(int curPlayer) {
+    protected M getPlayerMove(int curPlayer) {
         if (isHumanPlayer(curPlayer)) {
             // Human (user)
             return getUserPlayerMove(curPlayer);
