@@ -47,7 +47,7 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
 
     abstract protected void move(M move);
 
-    abstract protected M getPlayerMove(int player);
+    abstract protected M getUserPlayerMove(int player);
 
     abstract protected void showResult();
 
@@ -59,7 +59,7 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
             if (isGameOver(curPlayer))
                 break;
             if (isHumanPlayer(curPlayer)) {
-                move(getPlayerMove(curPlayer));
+                move(getUserPlayerMove(curPlayer));
             } else {
                 Node<M> root = makeTree(curPlayer, null, depth);
                 SearchResult ab = alphabeta(root, depth, VALUE_LOWER_BOUND, VALUE_UPPER_BOUND);
