@@ -58,19 +58,28 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
             System.out.println(board);
             if (isGameOver(curPlayer))
                 break;
-            if (isHumanPlayer(curPlayer)) {
-                move(getUserPlayerMove(curPlayer));
-            } else {
-                Node<M> root = makeTree(curPlayer, null, depth);
-                SearchResult ab = alphabeta(root, depth, VALUE_LOWER_BOUND, VALUE_UPPER_BOUND);
-                M move = root.getChildren().get(ab.getIdx()).getMove();
-                System.out.println(move);
-                move(move);
-            }
+
+            move(getPlayerMove(curPlayer));
+
             // Switch current player
             curPlayer = curPlayer == PLAYER_1 ? PLAYER_2 : PLAYER_1;
         }
         showResult();
+    }
+
+    protected getPlayerMove(int curPlayer) {
+        if (isHumanPlayer(curPlayer)) {
+            // Human (user)
+            return getUserPlayerMove(curPlayer);
+        } else {
+            // AI
+            Node<M> root = makeTree(curPlayer, null, depth);
+            SearchResult ab = alphabeta(root, depth, VALUE_LOWER_BOUND, VALUE_UPPER_BOUND);
+            M move = root.getChildren().get(ab.getIdx()).getMove();
+
+            System.out.println(move);
+            return move;
+        }
     }
 
     protected boolean isHumanPlayer(int player) {
