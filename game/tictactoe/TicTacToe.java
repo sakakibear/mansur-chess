@@ -63,7 +63,7 @@ public class TicTacToe extends BaseGame<Board, Move> {
     }
 
     @Override
-    protected Move getPlayerMove(int curPlayer) {
+    protected Move getUserPlayerMove(int curPlayer) {
         while (true) {
             System.out.printf("[%c] > ", PIECES[curPlayer]);
             String str = scanner.nextLine();
