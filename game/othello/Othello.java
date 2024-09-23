@@ -59,7 +59,14 @@ public class Othello extends BaseGame<Board, Move> {
             String str = scanner.nextLine();
             str = str.trim();
             if (str.equalsIgnoreCase("help")) {
-                // TODO Show possible moves to player
+                for (int i = 0; i < moves.size(); i++) {
+                    System.out.printf(
+                        "%s%s",
+                        i % 4 == 0 ? (i == 0 ? "" : "\n") : "\t",
+                        moves.get(i).toSimpleString()
+                    );
+                }
+                System.out.println();
                 continue;
             }
             // User input should be like 'a1', 'b3', 'c2'
