@@ -5,6 +5,8 @@ import static game.othello.Constants.DARK;
 import static game.othello.Constants.DISCS;
 import static game.othello.Constants.LIGHT;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -59,6 +61,14 @@ public class Othello extends BaseGame<Board, Move> {
             String str = scanner.nextLine();
             str = str.trim();
             if (str.equalsIgnoreCase("help")) {
+                Collections.sort(moves, new Comparator<Move>() {
+                    @Override
+                    public int compare(Move m1, Move m2) {
+                        if (m1.getY() == m2.getY())
+                            return m1.getX() - m2.getX();
+                        return m1.getY() - m2.getY();
+                    }
+                });
                 for (int i = 0; i < moves.size(); i++) {
                     System.out.printf(
                         "%s%s",
