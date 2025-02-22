@@ -1,5 +1,7 @@
 package game.othello;
 
+import static game.Constants.PLAYER_1;
+import static game.Constants.PLAYER_2;
 import static game.othello.Constants.BOARD_SIZE;
 import static game.othello.Constants.CORNER_SCORE;
 import static game.othello.Constants.DARK;
@@ -18,26 +20,18 @@ public class Evaluator extends BaseEvaluator<Board> {
 
     @Override
     public int evaluate(Board board) {
-        boolean isGameOver = rule.isGameOver(board);
-        int darkCnt = 0, lightCnt = 0;
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                int disc = board.get(i, j);
-                if (disc == DARK)
-                    darkCnt++;
-                else if (disc == LIGHT)
-                    lightCnt++;
-            }
-        }
-        if (isGameOver) {
-            if (darkCnt > lightCnt)
+        GameStatus gameStatus = rule.getGameStatus(board);
+        if (gameStatus.getIsGameOver()) {
+            int winnerPlayer = gameStatus.getWinnerPlayer();
+            if (winnerPlayer == PLAYER_1)
                 return VALUE_WIN;
-            else if (darkCnt == lightCnt)
-                return 0;
-            else
+            else if (winnerPlayer == PLAYER_2)
                 return VALUE_LOSE;
+            else
+                return 0;
         }
-        // Calculate additional scores of stable discs
+
+        int darkCnt = gameStatus.getDarkCnt(), lightCnt = gameStatus.getLightCnt();
         int stableAdjustment = 0;
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
