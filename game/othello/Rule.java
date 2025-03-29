@@ -99,6 +99,22 @@ public class Rule {
         }
     }
 
+    public GameStatus getGameStatus(Board board) {
+        boolean isGameOver = isGameOver(board);
+        int darkCnt = 0, lightCnt = 0;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (board.get(i, j) == DARK) {
+                    darkCnt++;
+                } else if (board.get(i, j) == LIGHT) {
+                    lightCnt++;
+                }
+            }
+        }
+        GameStatus result = new GameStatus(isGameOver, darkCnt, lightCnt);
+        return result;
+    }
+
     public boolean isGameOver(Board board) {
         return getNoPassMoves(board, PLAYER_1).isEmpty() && getNoPassMoves(board, PLAYER_2).isEmpty();
     }
