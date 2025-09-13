@@ -60,11 +60,13 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
                 break;
 
             move(getPlayerMove(curPlayer));
-
-            // Switch current player
-            curPlayer = curPlayer == PLAYER_1 ? PLAYER_2 : PLAYER_1;
+            curPlayer = getNextPlayer(curPlayer);
         }
         showResult();
+    }
+
+    protected int getNextPlayer(int curPlayer) {
+        return curPlayer == PLAYER_1 ? PLAYER_2 : PLAYER_1;
     }
 
     protected M getPlayerMove(int curPlayer) {
