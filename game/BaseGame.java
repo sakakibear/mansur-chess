@@ -91,23 +91,30 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
     protected Node<M> makeTree(int curPlayer, M move, int depth) {
         Node<M> root = new Node<M>();
         List<M> moves = getValidMoves(curPlayer);
+        root.setMove(move);
         if (depth == 0 || moves.size() == 0) {
             // Evaluation is based on player 1
             int v = evaluate() * (curPlayer == PLAYER_1 ? 1 : -1);
             root.setVal(v);
-        }
-        root.setMove(move);
-        if (depth > 0) {
-            for (M m : moves) {
-                @SuppressWarnings("unchecked")
-                B backupBoard = (B) board.clone();
-                move(m);
-                // Switch player
-                root.addChild(makeTree(curPlayer == PLAYER_1 ? PLAYER_2 : PLAYER_1, m, depth - 1));
-                board = backupBoard;
-            }
+        } else {
+            expandNode(root, curPlayer, depth, moves);
         }
         return root;
+    }
+
+    protected void expandNode(Node<M> parent, int curPlayer, int depth, List<M> moves) {
+        for (M m : moves) {
+            @SuppressWarnings("unchecked")
+            // Save the board
+            B backupBoard = (B) board.clone();
+            // Take move
+            move(m);
+            // Switch player in next depth
+            Node<M> child = makeTree(getNextPlayer(curPlayer), m, depth - 1);
+            parent.addChild(child);
+            // Restore the board
+            board = backupBoard;
+        }
     }
 
     protected int evaluate() {
