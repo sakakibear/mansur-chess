@@ -119,6 +119,7 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected int evaluate() {
         return evaluator.evaluate(board);
     }
