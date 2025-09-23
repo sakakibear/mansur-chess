@@ -1,8 +1,6 @@
 package game;
 
 import static game.Constants.DEFAULT_SEARCH_DEPTH;
-import static game.Constants.PLAYER_1;
-import static game.Constants.PLAYER_2;
 import static game.Constants.VALUE_LOWER_BOUND;
 import static game.Constants.VALUE_UPPER_BOUND;
 
@@ -16,13 +14,15 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
     protected B board;
     protected BaseEvaluator evaluator;
     protected int depth;
+    protected int numPlayers;
     protected boolean[] isHumanPlayer;
 
     public void init(String[] args) {
         depth = DEFAULT_SEARCH_DEPTH;
-        isHumanPlayer = new boolean[PLAYER_2 + 1];
-        isHumanPlayer[PLAYER_1] = true;
-        isHumanPlayer[PLAYER_2] = false;
+        numPlayers = 2;
+        isHumanPlayer = new boolean[numPlayers + 1];
+        isHumanPlayer[Player.PLAYER_1.getId()] = true;
+        isHumanPlayer[Player.PLAYER_2.getId()] = false;
         // Command line option
         try {
             for (int i = 0; i < args.length; i++) {
@@ -31,8 +31,8 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
                     depth = Integer.parseInt(args[++i]);
                 } else if (args[i].equals("-md")) {
                     // Human player moves defensive
-                    isHumanPlayer[PLAYER_1] = false;
-                    isHumanPlayer[PLAYER_2] = true;
+                    isHumanPlayer[Player.PLAYER_1.getId()] = false;
+                    isHumanPlayer[Player.PLAYER_2.getId()] = true;
                 }
             }
         } catch (Exception e) {
@@ -41,19 +41,19 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
         }
     }
 
-    abstract protected boolean isGameOver(int player);
+    abstract protected boolean isGameOver(Player player);
 
-    abstract protected List<M> getValidMoves(int player);
+    abstract protected List<M> getValidMoves(Player player);
 
     abstract protected void move(M move);
 
-    abstract protected M getUserPlayerMove(int player);
+    abstract protected M getUserPlayerMove(Player player);
 
     abstract protected void showResult();
 
     public void run(String[] args) {
         init(args);
-        int curPlayer = PLAYER_1;
+        Player curPlayer = Player.PLAYER_1;
         while (true) {
             System.out.println(board);
             if (isGameOver(curPlayer))
@@ -65,11 +65,13 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
         showResult();
     }
 
-    protected int getNextPlayer(int curPlayer) {
-        return curPlayer == PLAYER_1 ? PLAYER_2 : PLAYER_1;
+    protected Player getNextPlayer(Player curPlayer) {
+        return curPlayer == Player.PLAYER_1
+            ? Player.PLAYER_2
+            : Player.PLAYER_1;
     }
 
-    protected M getPlayerMove(int curPlayer) {
+    protected M getPlayerMove(Player curPlayer) {
         if (isHumanPlayer(curPlayer)) {
             // Human (user)
             return getUserPlayerMove(curPlayer);
@@ -84,17 +86,17 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
         }
     }
 
-    protected boolean isHumanPlayer(int player) {
-        return isHumanPlayer[player];
+    protected boolean isHumanPlayer(Player player) {
+        return isHumanPlayer[player.getId()];
     }
 
-    protected Node<M> makeTree(int curPlayer, M move, int depth) {
+    protected Node<M> makeTree(Player curPlayer, M move, int depth) {
         Node<M> root = new Node<M>();
         List<M> moves = getValidMoves(curPlayer);
         root.setMove(move);
         if (depth == 0 || moves.size() == 0) {
             // Evaluation is based on player 1
-            int v = evaluate() * (curPlayer == PLAYER_1 ? 1 : -1);
+            int v = evaluate() * (curPlayer == Player.PLAYER_1 ? 1 : -1);
             root.setVal(v);
         } else {
             expandNode(root, curPlayer, depth, moves);
@@ -102,7 +104,7 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
         return root;
     }
 
-    protected void expandNode(Node<M> parent, int curPlayer, int depth, List<M> moves) {
+    protected void expandNode(Node<M> parent, Player curPlayer, int depth, List<M> moves) {
         for (M m : moves) {
             @SuppressWarnings("unchecked")
             // Save the board

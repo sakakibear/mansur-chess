@@ -3,6 +3,7 @@ package game.tictactoe;
 import static game.tictactoe.Constants.PIECES;
 
 import game.BaseMove;
+import game.Player;
 
 /**
  * A player's move in the chess. In Tic-Tac-Toe, it contains of the position (x,
@@ -12,9 +13,9 @@ public class Move extends BaseMove {
 
     private int x;
     private int y;
-    private int player;
+    private Player player;
 
-    public Move(int x, int y, int player) {
+    public Move(int x, int y, Player player) {
         this.x = x;
         this.y = y;
         this.player = player;
@@ -28,12 +29,12 @@ public class Move extends BaseMove {
         return y;
     }
 
-    public int getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
     @Override
     public String toString() {
-        return String.format("[%c] > %c%d", PIECES[player], (char) ('a' + y), (x + 1));
+        return String.format("[%c] > %c%d", PIECES[player.getId()], (char) ('a' + y), (x + 1));
     }
 }

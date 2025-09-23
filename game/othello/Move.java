@@ -3,6 +3,7 @@ package game.othello;
 import static game.othello.Constants.DISCS;
 
 import game.BaseMove;
+import game.Player;
 
 /**
  * A player's move in an Othello game.
@@ -11,10 +12,10 @@ public class Move extends BaseMove {
 
     private int x;
     private int y;
-    private int player;
+    private Player player;
     private boolean isPass;
 
-    public Move(int x, int y, int player) {
+    public Move(int x, int y, Player player) {
         this.x = x;
         this.y = y;
         this.player = player;
@@ -22,7 +23,7 @@ public class Move extends BaseMove {
     }
 
     // Pass move
-    public Move(int player) {
+    public Move(Player player) {
         this.x = -1;
         this.y = -1;
         this.player = player;
@@ -31,7 +32,7 @@ public class Move extends BaseMove {
 
     @Override
     public String toString() {
-        return String.format("[%c] > %s", DISCS[player], this.toSimpleString());
+        return String.format("[%c] > %s", DISCS[player.getId()], this.toSimpleString());
     }
 
     public String toSimpleString() {
@@ -48,7 +49,7 @@ public class Move extends BaseMove {
         return y;
     }
 
-    public int getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 

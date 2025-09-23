@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import game.BaseGame;
+import game.Player;
 
 public class Othello extends BaseGame<Board, Move> {
 
@@ -34,12 +35,12 @@ public class Othello extends BaseGame<Board, Move> {
     }
 
     @Override
-    protected boolean isGameOver(int player) {
+    protected boolean isGameOver(Player player) {
         return rule.isGameOver(board);
     }
 
     @Override
-    protected List<Move> getValidMoves(int player) {
+    protected List<Move> getValidMoves(Player player) {
         return rule.getMoves(board, player);
     }
 
@@ -49,7 +50,7 @@ public class Othello extends BaseGame<Board, Move> {
     }
 
     @Override
-    protected Move getUserPlayerMove(int player) {
+    protected Move getUserPlayerMove(Player player) {
         List<Move> moves = getValidMoves(player);
         if (moves.size() < 1 || moves.size() == 1 && moves.get(0).isPass()) {
             System.out.print("PASS");
@@ -57,7 +58,7 @@ public class Othello extends BaseGame<Board, Move> {
             return new Move(player);
         }
         while (true) {
-            System.out.printf("[%c] > ", DISCS[player]);
+            System.out.printf("[%c] > ", DISCS[player.getId()]);
             String str = scanner.nextLine();
             str = str.trim();
             if (str.equalsIgnoreCase("help")) {
