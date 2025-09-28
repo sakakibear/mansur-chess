@@ -17,12 +17,15 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
     protected int numPlayers;
     protected boolean[] isHumanPlayer;
 
-    public void init(String[] args) {
+    public void init() {
         depth = DEFAULT_SEARCH_DEPTH;
         numPlayers = 2;
         isHumanPlayer = new boolean[numPlayers + 1];
         isHumanPlayer[Player.PLAYER_1.getId()] = true;
         isHumanPlayer[Player.PLAYER_2.getId()] = false;
+    }
+
+    protected void parseCommandLine(String[] args) {
         // Command line option
         try {
             for (int i = 0; i < args.length; i++) {
@@ -52,7 +55,8 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
     abstract protected void showResult();
 
     public void run(String[] args) {
-        init(args);
+        init();
+        parseCommandLine(args);
         Player curPlayer = Player.PLAYER_1;
         while (true) {
             System.out.println(board);

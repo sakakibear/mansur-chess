@@ -26,8 +26,8 @@ public class Othello extends BaseGame<Board, Move> {
     }
 
     @Override
-    public void init(String[] args) {
-        super.init(args);
+    public void init() {
+        super.init();
         board = new Board();
         board.init();
         evaluator = new Evaluator();

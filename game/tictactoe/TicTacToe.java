@@ -23,8 +23,8 @@ public class TicTacToe extends BaseGame<Board, Move> {
     }
 
     @Override
-    public void init(String[] args) {
-        super.init(args);
+    public void init() {
+        super.init();
         board = new Board();
         evaluator = new Evaluator();
         scanner = new Scanner(System.in);
