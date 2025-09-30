@@ -2,8 +2,6 @@ package game.tictactoe;
 
 import static game.tictactoe.Constants.BOARD_SIZE;
 import static game.tictactoe.Constants.PIECES;
-import static game.tictactoe.Constants.PLAYER_1;
-import static game.tictactoe.Constants.PLAYER_2;
 import static game.tictactoe.Constants.VALUE_LOSE;
 import static game.tictactoe.Constants.VALUE_WIN;
 
@@ -12,6 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import game.BaseGame;
+import game.Player;
 
 public class TicTacToe extends BaseGame<Board, Move> {
 
@@ -24,15 +23,15 @@ public class TicTacToe extends BaseGame<Board, Move> {
     }
 
     @Override
-    public void init(String[] args) {
-        super.init(args);
+    public void init() {
+        super.init();
         board = new Board();
         evaluator = new Evaluator();
         scanner = new Scanner(System.in);
     }
 
     @Override
-    protected boolean isGameOver(int player) {
+    protected boolean isGameOver(Player player) {
         List<Move> moves = getValidMoves(player);
         if (moves.size() == 0)
             return true;
@@ -43,7 +42,7 @@ public class TicTacToe extends BaseGame<Board, Move> {
     }
 
     @Override
-    protected List<Move> getValidMoves(int player) {
+    protected List<Move> getValidMoves(Player player) {
         List<Move> result = new ArrayList<Move>();
         int value = evaluate();
         if (value == VALUE_WIN || value == VALUE_LOSE)
@@ -59,13 +58,13 @@ public class TicTacToe extends BaseGame<Board, Move> {
 
     @Override
     protected void move(Move move) {
-        board.set(move.getX(), move.getY(), move.getPlayer());
+        board.set(move.getX(), move.getY(), move.getPlayer().getId());
     }
 
     @Override
-    protected Move getUserPlayerMove(int curPlayer) {
+    protected Move getUserPlayerMove(Player curPlayer) {
         while (true) {
-            System.out.printf("[%c] > ", PIECES[curPlayer]);
+            System.out.printf("[%c] > ", PIECES[curPlayer.getId()]);
             String str = scanner.nextLine();
             str = str.trim();
             if (str.length() != 2)
@@ -91,9 +90,9 @@ public class TicTacToe extends BaseGame<Board, Move> {
     protected void showResult() {
         int v = evaluate();
         if (v > 0) {
-            System.out.printf("[%c] won.\n", PIECES[PLAYER_1]);
+            System.out.printf("[%c] won.\n", PIECES[Player.PLAYER_1.getId()]);
         } else if (v < 0) {
-            System.out.printf("[%c] won.\n", PIECES[PLAYER_2]);
+            System.out.printf("[%c] won.\n", PIECES[Player.PLAYER_2.getId()]);
         } else {
             System.out.printf("Draw.\n");
         }

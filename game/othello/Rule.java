@@ -1,11 +1,11 @@
 package game.othello;
 
-import static game.Constants.PLAYER_1;
-import static game.Constants.PLAYER_2;
 import static game.othello.Constants.BOARD_SIZE;
 import static game.othello.Constants.DARK;
 import static game.othello.Constants.EMPTY;
 import static game.othello.Constants.LIGHT;
+
+import game.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +29,13 @@ public class Rule {
     protected static int[][] dirs = { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 1 }, { 1, -1 }, { 1, 0 },
             { 1, 1 }, };
 
-    public boolean isValidMove(Board board, int player, int x, int y) {
+    public boolean isValidMove(Board board, Player player, int x, int y) {
         if (x < 0 || x >= BOARD_SIZE || y < 0 || y >= BOARD_SIZE)
             return false;
         if (board.get(x, y) != EMPTY)
             return false;
-        int self = player == PLAYER_1 ? DARK : LIGHT;
-        int oppo = player == PLAYER_1 ? LIGHT : DARK;
+        int self = player == Player.PLAYER_1 ? DARK : LIGHT;
+        int oppo = player == Player.PLAYER_1 ? LIGHT : DARK;
         for (int[] dir : dirs) {
             int i = x + dir[0], j = y + dir[1];
             boolean hasOppo = false;
@@ -50,7 +50,7 @@ public class Rule {
         return false;
     }
 
-    public List<Move> getMoves(Board board, int player) {
+    public List<Move> getMoves(Board board, Player player) {
         // return empty list if game over
         if (isGameOver(board)) {
             return new ArrayList<Move>();
@@ -62,7 +62,7 @@ public class Rule {
         return result;
     }
 
-    public List<Move> getNoPassMoves(Board board, int player) {
+    public List<Move> getNoPassMoves(Board board, Player player) {
         List<Move> result = new ArrayList<Move>();
         for (int i = 0; i < BOARD_SIZE; i++)
             for (int j = 0; j < BOARD_SIZE; j++)
@@ -74,11 +74,11 @@ public class Rule {
     public void takeMove(Board board, Move move) {
         if (move.isPass())
             return;
-        int player = move.getPlayer();
+        Player player = move.getPlayer();
         int x = move.getX();
         int y = move.getY();
-        int self = player == PLAYER_1 ? DARK : LIGHT;
-        int oppo = player == PLAYER_1 ? LIGHT : DARK;
+        int self = player == Player.PLAYER_1 ? DARK : LIGHT;
+        int oppo = player == Player.PLAYER_1 ? LIGHT : DARK;
         board.set(x, y, self);
         for (int[] dir : dirs) {
             int i = x + dir[0], j = y + dir[1];
@@ -116,6 +116,6 @@ public class Rule {
     }
 
     public boolean isGameOver(Board board) {
-        return getNoPassMoves(board, PLAYER_1).isEmpty() && getNoPassMoves(board, PLAYER_2).isEmpty();
+        return getNoPassMoves(board, Player.PLAYER_1).isEmpty() && getNoPassMoves(board, Player.PLAYER_2).isEmpty();
     }
 }
