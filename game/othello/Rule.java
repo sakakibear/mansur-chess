@@ -5,6 +5,7 @@ import static game.othello.Constants.DARK;
 import static game.othello.Constants.EMPTY;
 import static game.othello.Constants.LIGHT;
 
+import game.GameRule;
 import game.Player;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Rule of Othello game.
  */
-public class Rule {
+public class Rule implements GameRule<Move, Player, Board> {
     private static Rule instance;
 
     private Rule() {
@@ -29,11 +30,19 @@ public class Rule {
     protected static int[][] dirs = { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 1 }, { 1, -1 }, { 1, 0 },
             { 1, 1 }, };
 
-    public boolean isValidMove(Board board, Player player, int x, int y) {
+    @Override
+    public boolean isLegalMove(Board board, Move move) {
+        if (move.isPass()) {
+            return true;
+        }
+
+        int x = move.getX();
+        int y = move.getY();
         if (x < 0 || x >= BOARD_SIZE || y < 0 || y >= BOARD_SIZE)
             return false;
         if (board.get(x, y) != EMPTY)
             return false;
+        Player player = move.getPlayer();
         int self = player == Player.PLAYER_1 ? DARK : LIGHT;
         int oppo = player == Player.PLAYER_1 ? LIGHT : DARK;
         for (int[] dir : dirs) {
@@ -50,6 +59,21 @@ public class Rule {
         return false;
     }
 
+    @Override
+    public List<Move> getLegalMoves(Board board, Player player) {
+        return this.getMoves(board, player);
+    }
+
+    @Override
+    public void makeMove(Board board, Move move) {
+        this.takeMove(board, move);
+    }
+
+    @Override
+    public boolean isGameOver(Board board) {
+        return getNoPassMoves(board, Player.PLAYER_1).isEmpty() && getNoPassMoves(board, Player.PLAYER_2).isEmpty();
+    }
+
     public List<Move> getMoves(Board board, Player player) {
         // return empty list if game over
         if (isGameOver(board)) {
@@ -62,11 +86,11 @@ public class Rule {
         return result;
     }
 
-    public List<Move> getNoPassMoves(Board board, Player player) {
+    protected List<Move> getNoPassMoves(Board board, Player player) {
         List<Move> result = new ArrayList<Move>();
         for (int i = 0; i < BOARD_SIZE; i++)
             for (int j = 0; j < BOARD_SIZE; j++)
-                if (isValidMove(board, player, i, j))
+                if (isLegalMove(board, new Move(i, j, player)))
                     result.add(new Move(i, j, player));
         return result;
     }
@@ -113,9 +137,5 @@ public class Rule {
         }
         GameStatus result = new GameStatus(isGameOver, darkCnt, lightCnt);
         return result;
-    }
-
-    public boolean isGameOver(Board board) {
-        return getNoPassMoves(board, Player.PLAYER_1).isEmpty() && getNoPassMoves(board, Player.PLAYER_2).isEmpty();
     }
 }
