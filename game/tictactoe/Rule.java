@@ -36,82 +36,19 @@ public class Rule implements GameRule<Move, Player, Board> {
 
     @Override
     public boolean isGameOver(Board board) {
-        // check rows
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            boolean flag = true;
-            int piece = board.get(i, 0);
-            if (piece == 0) {
-                flag = false;
-                break;
-            }
-            for (int j = 1; j < BOARD_SIZE; j++) {
-                if (piece != board.get(i, j)) {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag)
-                return true;
-        }
-
-        // check columns
-        for (int j = 0; j < BOARD_SIZE; j++) {
-            boolean flag = true;
-            int piece = board.get(0, j);
-            if (piece == 0) {
-                flag = false;
-                break;
-            }
-            for (int i = 1; i < BOARD_SIZE; i++) {
-                if (piece != board.get(i, j)) {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag)
-                return true;
-        }
-
-        // check diagonal lines
-        boolean flag = true;
-        int piece = board.get(0, 0);
-        if (piece == 0) {
-            flag = false;
-        }
-        if (flag) {
-            for (int i = 1; i < BOARD_SIZE; i++) {
-                if (piece != board.get(i, i)) {
-                    flag = false;
-                    break;
-                }
-            }
-        }
-        if (flag)
-            return true;
-        flag = true;
-        piece = board.get(0, BOARD_SIZE - 1);
-        if (piece == 0) {
-            flag = false;
-        }
-        if (flag) {
-            for (int i = 1; i < BOARD_SIZE; i++) {
-                if (piece != board.get(i, BOARD_SIZE - i - 1)) {
-                    flag = false;
-                    break;
-                }
-            }
-        }
-        if (flag)
-            return flag;
-
         // check if board is full
+        boolean isBoardFull = true;
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 if (board.get(i, j) == 0)
-                    return false;
+                    isBoardFull = false;
             }
         }
-        return true;
+        if (isBoardFull)
+            return true;
+
+        Player winner = getWinner(board);
+        return winner == null ? false : true;
     }
 
     public Player getWinner(Board board) {
