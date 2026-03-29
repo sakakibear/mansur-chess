@@ -37,8 +37,8 @@ public class Rule implements GameRule<Move, Player, Board> {
     @Override
     public boolean isGameOver(Board board) {
         // check rows
-        boolean flag = true;
         for (int i = 0; i < BOARD_SIZE; i++) {
+            boolean flag = true;
             int piece = board.get(i, 0);
             if (piece == 0) {
                 flag = false;
@@ -50,13 +50,13 @@ public class Rule implements GameRule<Move, Player, Board> {
                     break;
                 }
             }
+            if (flag)
+                return true;
         }
-        if (flag)
-            return true;
 
         // check columns
-        flag = true;
         for (int j = 0; j < BOARD_SIZE; j++) {
+            boolean flag = true;
             int piece = board.get(0, j);
             if (piece == 0) {
                 flag = false;
@@ -68,12 +68,12 @@ public class Rule implements GameRule<Move, Player, Board> {
                     break;
                 }
             }
+            if (flag)
+                return true;
         }
-        if (flag)
-            return true;
 
         // check diagonal lines
-        flag = true;
+        boolean flag = true;
         int piece = board.get(0, 0);
         if (piece == 0) {
             flag = false;
