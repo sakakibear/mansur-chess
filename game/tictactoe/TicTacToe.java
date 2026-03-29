@@ -75,15 +75,11 @@ public class TicTacToe extends BaseGame<Board, Move> {
 
     @Override
     protected void showResult() {
-        // TODO: getWinner should be defined in Rule to get rid of Evaluator.
-        int v = evaluate();
-        if (v > 0) {
-            System.out.printf("[%c] won.\n", PIECES[Player.PLAYER_1.getId()]);
-        } else if (v < 0) {
-            System.out.printf("[%c] won.\n", PIECES[Player.PLAYER_2.getId()]);
-        } else {
+        Player winnerPlayer = rule.getWinner(board);
+        if (winnerPlayer == null)
             System.out.printf("Draw.\n");
-        }
+        else
+            System.out.printf("[%c] won.\n", PIECES[winnerPlayer.getId()]);
     }
 
 }
