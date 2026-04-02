@@ -41,7 +41,7 @@ public class Othello extends BaseGame<Board, Move> {
 
     @Override
     protected List<Move> getValidMoves(Player player) {
-        return rule.getMoves(board, player);
+        return rule.getLegalMoves(board, player);
     }
 
     @Override
@@ -92,8 +92,9 @@ public class Othello extends BaseGame<Board, Move> {
                 cy = tmp;
             }
             int x = cx - '1', y = cy - 'a';
-            if (rule.isValidMove(board, player, x, y))
-                return new Move(x, y, player);
+            Move move = new Move(x, y, player);
+            if (rule.isLegalMove(board, move))
+                return move;
         }
     }
 

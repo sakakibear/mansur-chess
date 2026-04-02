@@ -14,6 +14,8 @@ import game.Player;
 
 public class TicTacToe extends BaseGame<Board, Move> {
 
+    protected Rule rule = new Rule();
+
     // Scanner to get user input
     protected Scanner scanner;
 
@@ -32,33 +34,18 @@ public class TicTacToe extends BaseGame<Board, Move> {
 
     @Override
     protected boolean isGameOver(Player player) {
-        List<Move> moves = getValidMoves(player);
-        if (moves.size() == 0)
-            return true;
-        int value = evaluate();
-        if (value == VALUE_WIN || value == VALUE_LOSE)
-            return true;
-        return false;
+        // TODO: Argument player not used.
+        return rule.isGameOver(board);
     }
 
     @Override
     protected List<Move> getValidMoves(Player player) {
-        List<Move> result = new ArrayList<Move>();
-        int value = evaluate();
-        if (value == VALUE_WIN || value == VALUE_LOSE)
-            return result;
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                if (board.get(i, j) == 0)
-                    result.add(new Move(i, j, player));
-            }
-        }
-        return result;
+        return rule.getLegalMoves(board, player);
     }
 
     @Override
     protected void move(Move move) {
-        board.set(move.getX(), move.getY(), move.getPlayer().getId());
+        rule.makeMove(board, move);
     }
 
     @Override
@@ -88,14 +75,11 @@ public class TicTacToe extends BaseGame<Board, Move> {
 
     @Override
     protected void showResult() {
-        int v = evaluate();
-        if (v > 0) {
-            System.out.printf("[%c] won.\n", PIECES[Player.PLAYER_1.getId()]);
-        } else if (v < 0) {
-            System.out.printf("[%c] won.\n", PIECES[Player.PLAYER_2.getId()]);
-        } else {
+        Player winnerPlayer = rule.getWinner(board);
+        if (winnerPlayer == null)
             System.out.printf("Draw.\n");
-        }
+        else
+            System.out.printf("[%c] won.\n", PIECES[winnerPlayer.getId()]);
     }
 
 }
