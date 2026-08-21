@@ -1,11 +1,7 @@
 package game.tictactoe;
 
-import static game.tictactoe.Constants.BOARD_SIZE;
 import static game.tictactoe.Constants.PIECES;
-import static game.tictactoe.Constants.VALUE_LOSE;
-import static game.tictactoe.Constants.VALUE_WIN;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
