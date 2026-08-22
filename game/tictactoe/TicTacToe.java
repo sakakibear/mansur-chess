@@ -29,8 +29,7 @@ public class TicTacToe extends BaseGame<Board, Move> {
     }
 
     @Override
-    protected boolean isGameOver(Player player) {
-        // TODO: Argument player not used.
+    protected boolean isGameOver() {
         return rule.isGameOver(board);
     }
 

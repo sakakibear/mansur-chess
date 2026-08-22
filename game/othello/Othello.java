@@ -35,7 +35,7 @@ public class Othello extends BaseGame<Board, Move> {
     }
 
     @Override
-    protected boolean isGameOver(Player player) {
+    protected boolean isGameOver() {
         return rule.isGameOver(board);
     }
 

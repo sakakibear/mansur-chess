@@ -44,7 +44,7 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
         }
     }
 
-    abstract protected boolean isGameOver(Player player);
+    abstract protected boolean isGameOver();
 
     abstract protected List<M> getValidMoves(Player player);
 
@@ -60,7 +60,7 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
         Player curPlayer = Player.PLAYER_1;
         while (true) {
             System.out.println(board);
-            if (isGameOver(curPlayer))
+            if (isGameOver())
                 break;
 
             move(getPlayerMove(curPlayer));
