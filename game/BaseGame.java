@@ -9,9 +9,10 @@ import java.util.List;
 /**
  * Abstract base class of a two-player game.
  */
-public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
+public abstract class BaseGame<B extends BaseBoard, M extends BaseMove, R extends GameRule<M, Player, B>> {
 
     protected B board;
+    protected R rule;
     protected BaseEvaluator evaluator;
     protected int depth;
     protected int numPlayers;

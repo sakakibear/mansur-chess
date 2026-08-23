@@ -8,9 +8,7 @@ import java.util.Scanner;
 import game.BaseGame;
 import game.Player;
 
-public class TicTacToe extends BaseGame<Board, Move> {
-
-    protected Rule rule = new Rule();
+public class TicTacToe extends BaseGame<Board, Move, Rule> {
 
     // Scanner to get user input
     protected Scanner scanner;
@@ -24,6 +22,7 @@ public class TicTacToe extends BaseGame<Board, Move> {
     public void init() {
         super.init();
         board = new Board();
+        rule = new Rule();
         evaluator = new Evaluator();
         scanner = new Scanner(System.in);
     }
