@@ -2,7 +2,6 @@ package game.tictactoe;
 
 import static game.tictactoe.Constants.PIECES;
 
-import java.util.List;
 import java.util.Scanner;
 
 import game.BaseGame;
@@ -25,21 +24,6 @@ public class TicTacToe extends BaseGame<Board, Move, Rule> {
         rule = new Rule();
         evaluator = new Evaluator();
         scanner = new Scanner(System.in);
-    }
-
-    @Override
-    protected boolean isGameOver() {
-        return rule.isGameOver(board);
-    }
-
-    @Override
-    protected List<Move> getValidMoves(Player player) {
-        return rule.getLegalMoves(board, player);
-    }
-
-    @Override
-    protected void move(Move move) {
-        rule.makeMove(board, move);
     }
 
     @Override

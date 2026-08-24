@@ -34,23 +34,8 @@ public class Othello extends BaseGame<Board, Move, Rule> {
     }
 
     @Override
-    protected boolean isGameOver() {
-        return rule.isGameOver(board);
-    }
-
-    @Override
-    protected List<Move> getValidMoves(Player player) {
-        return rule.getLegalMoves(board, player);
-    }
-
-    @Override
-    protected void move(Move move) {
-        rule.takeMove(board, move);
-    }
-
-    @Override
     protected Move getUserPlayerMove(Player player) {
-        List<Move> moves = getValidMoves(player);
+        List<Move> moves = rule.getLegalMoves(board, player);
         if (moves.size() < 1 || moves.size() == 1 && moves.get(0).isPass()) {
             System.out.print("PASS");
             scanner.nextLine();

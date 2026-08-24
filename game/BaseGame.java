@@ -45,12 +45,6 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove, R extend
         }
     }
 
-    abstract protected boolean isGameOver();
-
-    abstract protected List<M> getValidMoves(Player player);
-
-    abstract protected void move(M move);
-
     abstract protected M getUserPlayerMove(Player player);
 
     abstract protected void showResult();
@@ -61,10 +55,13 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove, R extend
         Player curPlayer = Player.PLAYER_1;
         while (true) {
             System.out.println(board);
-            if (isGameOver())
+            if (rule.isGameOver(board))
                 break;
 
-            move(getPlayerMove(curPlayer));
+            // XXX: `move` must be decided before calling `makeMove`.
+            // `board` might be replaced during searching the game tree.
+            M move = getPlayerMove(curPlayer);
+            rule.makeMove(board, move);
             curPlayer = getNextPlayer(curPlayer);
         }
         showResult();
@@ -97,7 +94,7 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove, R extend
 
     protected Node<M> makeTree(Player curPlayer, M move, int depth) {
         Node<M> root = new Node<M>();
-        List<M> moves = getValidMoves(curPlayer);
+        List<M> moves = rule.getLegalMoves(board, curPlayer);
         root.setMove(move);
         if (depth == 0 || moves.size() == 0) {
             // Evaluation is based on player 1
@@ -115,7 +112,7 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove, R extend
             // Save the board
             B backupBoard = (B) board.clone();
             // Take move
-            move(m);
+            rule.makeMove(board, m);
             // Switch player in next depth
             Node<M> child = makeTree(getNextPlayer(curPlayer), m, depth - 1);
             parent.addChild(child);
