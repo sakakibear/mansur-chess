@@ -28,7 +28,7 @@ public class Othello extends BaseGame<Board, Move, Rule> {
         super.init();
         board = new Board();
         board.init();
-        rule = Rule.getInstance();
+        rule = new Rule();
         evaluator = new Evaluator();
         scanner = new Scanner(System.in);
     }

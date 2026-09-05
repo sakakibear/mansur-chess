@@ -15,16 +15,6 @@ import java.util.List;
  * Rule of Othello game.
  */
 public class Rule implements GameRule<Move, Player, Board> {
-    private static Rule instance;
-
-    private Rule() {
-    }
-
-    public static Rule getInstance() {
-        if (instance == null)
-            instance = new Rule();
-        return instance;
-    }
 
     // 8 directions on the board
     protected static int[][] dirs = { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 1 }, { 1, -1 }, { 1, 0 },
