@@ -51,20 +51,6 @@ public class Rule implements GameRule<Move, Player, Board> {
 
     @Override
     public List<Move> getLegalMoves(Board board, Player player) {
-        return this.getMoves(board, player);
-    }
-
-    @Override
-    public void makeMove(Board board, Move move) {
-        this.takeMove(board, move);
-    }
-
-    @Override
-    public boolean isGameOver(Board board) {
-        return getNoPassMoves(board, Player.PLAYER_1).isEmpty() && getNoPassMoves(board, Player.PLAYER_2).isEmpty();
-    }
-
-    public List<Move> getMoves(Board board, Player player) {
         // return empty list if game over
         if (isGameOver(board)) {
             return new ArrayList<Move>();
@@ -76,6 +62,11 @@ public class Rule implements GameRule<Move, Player, Board> {
         return result;
     }
 
+    @Override
+    public boolean isGameOver(Board board) {
+        return getNoPassMoves(board, Player.PLAYER_1).isEmpty() && getNoPassMoves(board, Player.PLAYER_2).isEmpty();
+    }
+
     protected List<Move> getNoPassMoves(Board board, Player player) {
         List<Move> result = new ArrayList<Move>();
         for (int i = 0; i < BOARD_SIZE; i++)
@@ -85,7 +76,8 @@ public class Rule implements GameRule<Move, Player, Board> {
         return result;
     }
 
-    public void takeMove(Board board, Move move) {
+    @Override
+    public void makeMove(Board board, Move move) {
         if (move.isPass())
             return;
         Player player = move.getPlayer();
