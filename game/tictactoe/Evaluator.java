@@ -8,7 +8,6 @@ import static game.tictactoe.Constants.VALUE_ONE_IN_LINE;
 import static game.tictactoe.Constants.VALUE_TWO_IN_LINE;
 import static game.tictactoe.Constants.VALUE_WIN;
 
-import game.BaseBoard;
 import game.BaseEvaluator;
 
 public class Evaluator extends BaseEvaluator<Board> {
