@@ -2,13 +2,6 @@ package game.othello;
 
 import static game.Constants.PLAYER_1;
 import static game.Constants.PLAYER_2;
-import static game.othello.Constants.BOARD_SIZE;
-import static game.othello.Constants.DARK;
-import static game.othello.Constants.EMPTY;
-import static game.othello.Constants.LIGHT;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Game status of Othello game.

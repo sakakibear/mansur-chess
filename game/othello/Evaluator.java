@@ -16,7 +16,7 @@ import game.BaseEvaluator;
 
 public class Evaluator extends BaseEvaluator<Board> {
 
-    protected Rule rule = Rule.getInstance();
+    protected Rule rule = new Rule();
 
     @Override
     public int evaluate(Board board) {

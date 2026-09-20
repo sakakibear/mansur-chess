@@ -9,9 +9,10 @@ import java.util.List;
 /**
  * Abstract base class of a two-player game.
  */
-public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
+public abstract class BaseGame<B extends BaseBoard, M extends BaseMove, R extends GameRule<M, Player, B>> {
 
     protected B board;
+    protected R rule;
     protected BaseEvaluator evaluator;
     protected int depth;
     protected int numPlayers;
@@ -44,12 +45,6 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
         }
     }
 
-    abstract protected boolean isGameOver(Player player);
-
-    abstract protected List<M> getValidMoves(Player player);
-
-    abstract protected void move(M move);
-
     abstract protected M getUserPlayerMove(Player player);
 
     abstract protected void showResult();
@@ -60,10 +55,13 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
         Player curPlayer = Player.PLAYER_1;
         while (true) {
             System.out.println(board);
-            if (isGameOver(curPlayer))
+            if (rule.isGameOver(board))
                 break;
 
-            move(getPlayerMove(curPlayer));
+            // XXX: `move` must be decided before calling `makeMove`.
+            // `board` might be replaced during searching the game tree.
+            M move = getPlayerMove(curPlayer);
+            rule.makeMove(board, move);
             curPlayer = getNextPlayer(curPlayer);
         }
         showResult();
@@ -96,7 +94,7 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
 
     protected Node<M> makeTree(Player curPlayer, M move, int depth) {
         Node<M> root = new Node<M>();
-        List<M> moves = getValidMoves(curPlayer);
+        List<M> moves = rule.getLegalMoves(board, curPlayer);
         root.setMove(move);
         if (depth == 0 || moves.size() == 0) {
             // Evaluation is based on player 1
@@ -114,7 +112,7 @@ public abstract class BaseGame<B extends BaseBoard, M extends BaseMove> {
             // Save the board
             B backupBoard = (B) board.clone();
             // Take move
-            move(m);
+            rule.makeMove(board, m);
             // Switch player in next depth
             Node<M> child = makeTree(getNextPlayer(curPlayer), m, depth - 1);
             parent.addChild(child);

@@ -13,9 +13,7 @@ import java.util.Scanner;
 import game.BaseGame;
 import game.Player;
 
-public class Othello extends BaseGame<Board, Move> {
-
-    protected Rule rule = Rule.getInstance();
+public class Othello extends BaseGame<Board, Move, Rule> {
 
     // Scanner to get user input
     protected Scanner scanner;
@@ -30,28 +28,14 @@ public class Othello extends BaseGame<Board, Move> {
         super.init();
         board = new Board();
         board.init();
+        rule = new Rule();
         evaluator = new Evaluator();
         scanner = new Scanner(System.in);
     }
 
     @Override
-    protected boolean isGameOver(Player player) {
-        return rule.isGameOver(board);
-    }
-
-    @Override
-    protected List<Move> getValidMoves(Player player) {
-        return rule.getLegalMoves(board, player);
-    }
-
-    @Override
-    protected void move(Move move) {
-        rule.takeMove(board, move);
-    }
-
-    @Override
     protected Move getUserPlayerMove(Player player) {
-        List<Move> moves = getValidMoves(player);
+        List<Move> moves = rule.getLegalMoves(board, player);
         if (moves.size() < 1 || moves.size() == 1 && moves.get(0).isPass()) {
             System.out.print("PASS");
             scanner.nextLine();
